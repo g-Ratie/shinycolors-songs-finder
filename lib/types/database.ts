@@ -32,23 +32,34 @@ export interface VibeTag {
 export interface Song {
   id: string;
   title: string;
-  unit_id: string;
+  unit_id: string | null;
   member_id: string | null;
   song_type: SongType;
   attribute: AttributeType | null;
-  youtube_url: string;
+  youtube_url: string | null;
   links: Record<string, string>;
+  is_published: boolean;
   created_at: string;
   updated_at: string;
-  unit?: Unit;
+  unit?: Unit | null;
   member?: Member | null;
   vibe_tags?: VibeTag[];
 }
 
 export interface SongWithRelations extends Song {
-  unit: Unit;
+  unit: Unit | null;
   member: Member | null;
   vibe_tags: VibeTag[];
+}
+
+export function canPublishSong(song: Song): boolean {
+  if (!song.title || !song.unit_id || !song.youtube_url) {
+    return false;
+  }
+  if (song.song_type === "solo" && (!song.member_id || !song.attribute)) {
+    return false;
+  }
+  return true;
 }
 
 export type InquiryType = "request" | "question" | "other";
