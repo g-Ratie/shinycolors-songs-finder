@@ -10,6 +10,24 @@ export default function AdminPage() {
 
         <nav className="grid gap-4 sm:grid-cols-2">
           <Link
+            href="/admin/songs"
+            className="block p-6 bg-white rounded-lg border border-slate-200 hover:border-shiny-blue transition-colors"
+          >
+            <h2 className="text-lg font-medium text-slate-800">楽曲管理</h2>
+            <p className="mt-1 text-sm text-slate-500">
+              楽曲の追加・編集・削除
+            </p>
+          </Link>
+          <Link
+            href="/admin/vibe-tags"
+            className="block p-6 bg-white rounded-lg border border-slate-200 hover:border-shiny-blue transition-colors"
+          >
+            <h2 className="text-lg font-medium text-slate-800">タグ管理</h2>
+            <p className="mt-1 text-sm text-slate-500">
+              Vibeタグの追加・削除
+            </p>
+          </Link>
+          <Link
             href="/admin/inquiries"
             className="block p-6 bg-white rounded-lg border border-slate-200 hover:border-shiny-blue transition-colors"
           >
