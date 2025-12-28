@@ -1,11 +1,35 @@
 import Link from "next/link";
-import { getSongs, getUnits, getVibeTags } from "@/lib/queries";
+import { getUnits, getVibeTags } from "@/lib/queries";
 import { SongTable } from "./SongTable";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
+import type { SongWithRelations, VibeTag } from "@/lib/types/database";
 
 export const dynamic = "force-dynamic";
 
+async function getAdminSongs(): Promise<SongWithRelations[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("songs")
+    .select(`
+      *,
+      unit:units(*),
+      member:members(*),
+      vibe_tags:song_vibe_tags(vibe_tag:vibe_tags(*))
+    `)
+    .order("created_at");
+
+  if (error) throw error;
+
+  return (data ?? []).map((song) => ({
+    ...song,
+    vibe_tags: song.vibe_tags?.map(
+      (svt: { vibe_tag: VibeTag }) => svt.vibe_tag
+    ) ?? [],
+  })) as SongWithRelations[];
+}
+
 async function getMembers() {
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("members")
     .select("*, unit:units(*)")
@@ -18,7 +42,7 @@ async function getMembers() {
 
 export default async function AdminSongsPage() {
   const [songs, units, vibeTags, members] = await Promise.all([
-    getSongs(),
+    getAdminSongs(),
     getUnits(),
     getVibeTags(),
     getMembers(),
