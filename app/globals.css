@@ -22,6 +22,10 @@
   --font-mono: var(--font-geist-mono);
 }
 
+html {
+  overscroll-behavior: none;
+}
+
 body {
   background: linear-gradient(180deg, var(--shiny-blue-light) 0%, var(--background) 20%, #ffffff 100%);
   color: var(--foreground);
