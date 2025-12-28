@@ -63,7 +63,7 @@ export async function getSongs(
     query = query.ilike("title", `%${filters.searchQuery}%`);
   }
 
-  const { data, error } = await query.order("title");
+  const { data, error } = await query.order("created_at");
 
   if (error) throw error;
 
