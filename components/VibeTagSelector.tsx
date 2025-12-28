@@ -20,7 +20,7 @@ export function VibeTagSelector({
       <h2 className="text-sm font-bold text-slate-700 tracking-wide">
         タグ
       </h2>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2.5">
         {vibeTags.map((tag) => {
           const count = counts[tag.slug] ?? 0;
           const isSelected = selectedSlugs.includes(tag.slug);
@@ -30,7 +30,7 @@ export function VibeTagSelector({
               key={tag.id}
               onClick={() => onToggle(tag.slug)}
               className={`
-                px-4 py-2 rounded-full text-sm font-medium
+                px-5 py-2.5 rounded-full text-base font-medium
                 border-2 transition-all duration-200
                 ${
                   isSelected
@@ -41,7 +41,7 @@ export function VibeTagSelector({
             >
               {tag.name}
               <span
-                className={`ml-1.5 text-xs ${
+                className={`ml-2 text-sm ${
                   isSelected ? "text-white/80" : "text-slate-400"
                 }`}
               >

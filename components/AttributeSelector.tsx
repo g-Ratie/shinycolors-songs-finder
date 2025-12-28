@@ -20,11 +20,11 @@ export function AttributeSelector({
   onSelect,
 }: AttributeSelectorProps) {
   return (
-    <div className="space-y-2">
-      <h2 className="text-sm font-medium text-slate-600">
-        属性 <span className="text-xs">※ソロ曲のみ</span>
+    <div className="space-y-3">
+      <h2 className="text-sm font-bold text-slate-700 tracking-wide">
+        属性 <span className="text-xs font-normal text-slate-500">（ソロ曲のみ）</span>
       </h2>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-3">
         {attributes.map(({ value, label, color }) => {
           const count = counts[value] ?? 0;
           const isSelected = selectedAttribute === value;
@@ -34,20 +34,25 @@ export function AttributeSelector({
               key={value}
               onClick={() => onSelect(value)}
               className={`
-                flex items-center gap-2 px-4 py-2 rounded-lg
-                border transition-all
+                flex items-center gap-3 px-5 py-3 rounded-2xl
+                border-2 transition-all duration-200
                 ${
                   isSelected
-                    ? "ring-2 ring-offset-2 ring-shiny-blue"
-                    : ""
+                    ? "bg-gradient-to-r from-shiny-blue/30 to-shiny-blue/20 border-shiny-blue shadow-md scale-105"
+                    : "glass-card border-transparent hover:border-shiny-blue/50 hover:shadow-sm"
                 }
-                bg-white border-shiny-blue/20 hover:border-shiny-blue/50
               `}
             >
-              <span className={`w-3 h-3 rounded-full ${color}`} />
-              <span className="text-sm font-medium text-slate-700">{label}</span>
-              <span className="text-xs text-slate-500">
-                ({count})
+              <span className={`w-5 h-5 rounded-full ${color} shadow-sm`} />
+              <span className={`text-base font-medium ${isSelected ? "text-shiny-blue-dark" : "text-slate-700"}`}>
+                {label}
+              </span>
+              <span className={`text-sm px-2 py-1 rounded-full ${
+                isSelected
+                  ? "bg-shiny-blue text-white"
+                  : "bg-slate-100 text-slate-500"
+              }`}>
+                {count}
               </span>
             </button>
           );
