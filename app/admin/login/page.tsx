@@ -36,6 +36,17 @@ export default function AdminLoginPage() {
     }
   };
 
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white rounded-lg border border-slate-200 p-8 text-center">
+          <div className="inline-block w-8 h-8 border-4 border-shiny-blue border-t-transparent rounded-full animate-spin" />
+          <p className="mt-4 text-slate-600">送信中...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (status === "sent") {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
