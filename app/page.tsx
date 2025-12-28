@@ -41,9 +41,6 @@ export default async function Home() {
             お問い合わせ
           </Link>
         </div>
-        <p className="mt-3 text-xs text-slate-400">
-          THE IDOLM@STER and all related marks are trademarks of Bandai Namco Entertainment Inc.
-        </p>
       </footer>
     </div>
   );
