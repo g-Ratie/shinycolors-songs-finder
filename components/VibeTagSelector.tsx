@@ -19,11 +19,6 @@ export function VibeTagSelector({
     <div className="space-y-2">
       <h2 className="text-sm font-medium text-slate-600">
         その他要素（Vibe）
-        {selectedSlugs.length > 0 && (
-          <span className="ml-2 text-xs text-shiny-blue-dark">
-            {selectedSlugs.length}件選択中 - AND条件
-          </span>
-        )}
       </h2>
       <div className="flex flex-wrap gap-2">
         {vibeTags.map((tag) => {
