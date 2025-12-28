@@ -53,7 +53,10 @@ export interface SongWithRelations extends Song {
 }
 
 export function canPublishSong(song: Song): boolean {
-  if (!song.title || !song.unit_id || !song.youtube_url) {
+  if (!song.title || !song.youtube_url) {
+    return false;
+  }
+  if (song.song_type !== "collaboration" && !song.unit_id) {
     return false;
   }
   if (song.song_type === "solo" && !song.member_id) {
