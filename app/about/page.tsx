@@ -7,8 +7,9 @@ export default function AboutPage() {
         <header className="mb-8">
           <Link
             href="/"
-            className="text-shiny-blue-dark hover:text-shiny-blue text-sm"
+            className="inline-flex items-center gap-1 text-slate-600 hover:text-shiny-blue-dark text-sm transition-colors"
           >
+            <span aria-hidden="true">&larr;</span>
             トップに戻る
           </Link>
           <h1 className="mt-4 text-2xl font-bold text-slate-800">
