@@ -35,22 +35,15 @@ create type attribute_type as enum ('stella', 'luna', 'sol');
 create table songs (
   id uuid primary key default gen_random_uuid(),
   title text not null,
-  unit_id uuid not null references units(id) on delete restrict,
+  unit_id uuid references units(id) on delete restrict,
   member_id uuid references members(id) on delete restrict,
   song_type song_type not null default 'unit',
   attribute attribute_type,
-  youtube_url text not null,
+  youtube_url text,
   links jsonb default '{}',
+  is_published boolean not null default false,
   created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  constraint songs_attribute_solo_only check (
-    (song_type = 'solo' and attribute is not null) or
-    (song_type != 'solo' and attribute is null)
-  ),
-  constraint songs_member_solo_only check (
-    (song_type = 'solo' and member_id is not null) or
-    (song_type != 'solo' and member_id is null)
-  )
+  updated_at timestamptz not null default now()
 );
 
 -- vibe_tags: Vibeタグマスタ
@@ -131,6 +124,7 @@ create index songs_member_id_idx on songs(member_id) where member_id is not null
 create index songs_song_type_idx on songs(song_type);
 create index songs_attribute_idx on songs(attribute) where attribute is not null;
 create index songs_title_idx on songs using gin(title gin_trgm_ops);
+create index songs_is_published_idx on songs(is_published) where is_published = true;
 create index vibe_tags_sort_order_idx on vibe_tags(sort_order);
 create index song_vibe_tags_vibe_tag_id_idx on song_vibe_tags(vibe_tag_id);
 create index rate_limit_attempts_key_time_idx on rate_limit_attempts(key, attempted_at);
@@ -165,7 +159,7 @@ create policy "Admin can update member_units" on member_units for update using (
 create policy "Admin can delete member_units" on member_units for delete using (is_admin());
 
 -- RLSポリシー: songs
-create policy "Anyone can view songs" on songs for select using (true);
+create policy "Anyone can view published songs" on songs for select using (is_published = true or is_admin());
 create policy "Admin can insert songs" on songs for insert with check (is_admin());
 create policy "Admin can update songs" on songs for update using (is_admin());
 create policy "Admin can delete songs" on songs for delete using (is_admin());
@@ -177,7 +171,9 @@ create policy "Admin can update vibe_tags" on vibe_tags for update using (is_adm
 create policy "Admin can delete vibe_tags" on vibe_tags for delete using (is_admin());
 
 -- RLSポリシー: song_vibe_tags
-create policy "Anyone can view song_vibe_tags" on song_vibe_tags for select using (true);
+create policy "Anyone can view song_vibe_tags for published songs" on song_vibe_tags for select using (
+  exists (select 1 from songs where songs.id = song_id and (songs.is_published = true or is_admin()))
+);
 create policy "Admin can insert song_vibe_tags" on song_vibe_tags for insert with check (is_admin());
 create policy "Admin can delete song_vibe_tags" on song_vibe_tags for delete using (is_admin());
 
