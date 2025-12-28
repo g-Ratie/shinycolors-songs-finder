@@ -96,7 +96,13 @@ export interface CountResult {
 export async function getSongCounts(
   filters: SongFilters = {}
 ): Promise<CountResult> {
-  const filteredSongs = await getSongs(filters);
+  const { unitSlug, attribute, ...otherFilters } = filters;
+
+  const [songsForUnits, songsForAttrs, filteredSongs] = await Promise.all([
+    getSongs({ ...otherFilters, attribute }),
+    getSongs({ ...otherFilters, unitSlug }),
+    getSongs(filters),
+  ]);
 
   const counts: CountResult = {
     units: {},
@@ -105,16 +111,20 @@ export async function getSongCounts(
     total: filteredSongs.length,
   };
 
-  for (const song of filteredSongs) {
-    const unitSlug = song.unit?.slug;
-    if (unitSlug) {
-      counts.units[unitSlug] = (counts.units[unitSlug] ?? 0) + 1;
+  for (const song of songsForUnits) {
+    const slug = song.unit?.slug;
+    if (slug) {
+      counts.units[slug] = (counts.units[slug] ?? 0) + 1;
     }
+  }
 
+  for (const song of songsForAttrs) {
     if (song.attribute) {
       counts.attributes[song.attribute]++;
     }
+  }
 
+  for (const song of filteredSongs) {
     for (const vibeTag of song.vibe_tags ?? []) {
       if (vibeTag.slug) {
         counts.vibeTags[vibeTag.slug] =
