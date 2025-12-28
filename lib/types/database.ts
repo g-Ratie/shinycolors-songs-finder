@@ -7,12 +7,19 @@ export interface Unit {
   slug: string;
 }
 
+export interface MemberUnit {
+  member_id: string;
+  unit_id: string;
+  is_primary: boolean;
+  unit?: Unit;
+}
+
 export interface Member {
   id: string;
   name: string;
-  unit_id: string;
   sort_order: number;
-  unit?: Unit;
+  member_units?: MemberUnit[];
+  units?: Unit[];
 }
 
 export interface VibeTag {
