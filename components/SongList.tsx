@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import type { SongWithRelations } from "@/lib/types/database";
+import type { SongWithRelations, AttributeType } from "@/lib/types/database";
 import { extractVideoId, getThumbnailUrl } from "@/lib/youtube";
 
 interface SongListProps {
@@ -52,7 +52,8 @@ export function SongList({ songs }: SongListProps) {
             ? extractVideoId(song.youtube_url)
             : null;
           const thumbnailUrl = videoId ? getThumbnailUrl(videoId, "mq") : null;
-          const attrStyle = song.attribute ? attributeStyles[song.attribute] : null;
+          const memberAttr = song.member?.attribute as AttributeType | undefined;
+          const attrStyle = memberAttr ? attributeStyles[memberAttr] : null;
 
           return (
             <a
@@ -100,11 +101,11 @@ export function SongList({ songs }: SongListProps) {
                   )}
                 </div>
                 <div className="mt-3 flex flex-wrap items-center gap-2">
-                  {attrStyle && (
+                  {attrStyle && memberAttr && (
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-bold ${attrStyle.bg} ${attrStyle.text} border ${attrStyle.border}`}
                     >
-                      {song.attribute!.charAt(0).toUpperCase() + song.attribute!.slice(1)}
+                      {memberAttr.charAt(0).toUpperCase() + memberAttr.slice(1)}
                     </span>
                   )}
                   {song.vibe_tags.slice(0, 3).map((tag) => (
