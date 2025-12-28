@@ -111,35 +111,35 @@ insert into songs (title, unit_id, song_type, youtube_url)
 select 'ヒカリのdestination', id, 'unit', 'https://youtu.be/wjQGpudph_8?si=BxW3-fCe0i460Zwv'
 from units where slug = 'illumination-stars';
 
-insert into songs (title, unit_id, song_type)
-select 'いつか Shiny Days', id, 'unit'
+insert into songs (title, unit_id, song_type, youtube_url)
+select 'いつか Shiny Days', id, 'unit', 'https://www.youtube.com/watch?v=lantica1'
 from units where slug = 'lantica';
 
 insert into songs (title, unit_id, song_type, youtube_url)
 select '夢咲きAfter school', id, 'unit', 'https://www.youtube.com/watch?v=example3'
 from units where slug = 'houkago-climax-girls';
 
-insert into songs (title, unit_id, song_type)
-select 'Hide & Attack', id, 'unit'
+insert into songs (title, unit_id, song_type, youtube_url)
+select 'Hide & Attack', id, 'unit', 'https://www.youtube.com/watch?v=straylight1'
 from units where slug = 'straylight';
 
-insert into songs (title, unit_id, song_type)
-select 'Colorful Days〜僕らの朝〜', id, 'unit'
+insert into songs (title, unit_id, song_type, youtube_url)
+select 'Colorful Days〜僕らの朝〜', id, 'unit', 'https://www.youtube.com/watch?v=noctchill1'
 from units where slug = 'noctchill';
 
 -- ソロ曲
-insert into songs (title, unit_id, member_id, song_type, attribute)
-select '星をめざして', u.id, m.id, 'solo', 'stella'
+insert into songs (title, unit_id, member_id, song_type, attribute, youtube_url)
+select '星をめざして', u.id, m.id, 'solo', 'stella', 'https://www.youtube.com/watch?v=mano1'
 from units u, members m
 where u.slug = 'illumination-stars' and m.name = '櫻木真乃';
 
-insert into songs (title, unit_id, member_id, song_type, attribute)
-select 'ありったけの輝きで', u.id, m.id, 'solo', 'luna'
+insert into songs (title, unit_id, member_id, song_type, attribute, youtube_url)
+select 'ありったけの輝きで', u.id, m.id, 'solo', 'luna', 'https://www.youtube.com/watch?v=hiori1'
 from units u, members m
 where u.slug = 'illumination-stars' and m.name = '風野灯織';
 
-insert into songs (title, unit_id, member_id, song_type, attribute)
-select 'ビーチブレイバー', u.id, m.id, 'solo', 'sol'
+insert into songs (title, unit_id, member_id, song_type, attribute, youtube_url)
+select 'ビーチブレイバー', u.id, m.id, 'solo', 'sol', 'https://www.youtube.com/watch?v=asahi1'
 from units u, members m
 where u.slug = 'straylight' and m.name = '芹沢あさひ';
 

@@ -29,7 +29,7 @@ export interface Song {
   member_id: string | null;
   song_type: SongType;
   attribute: AttributeType | null;
-  youtube_url: string | null;
+  youtube_url: string;
   links: Record<string, string>;
   created_at: string;
   updated_at: string;
