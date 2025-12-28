@@ -109,14 +109,14 @@ export function SongFinderClient({
       {hasActiveFilters && (
         <button
           onClick={clearFilters}
-          className="text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
+          className="text-sm text-shiny-blue-dark hover:text-shiny-blue"
         >
           フィルターをクリア
         </button>
       )}
 
       {isLoading ? (
-        <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+        <div className="text-center py-12 text-slate-500">
           読み込み中...
         </div>
       ) : (

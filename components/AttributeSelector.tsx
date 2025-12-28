@@ -21,7 +21,7 @@ export function AttributeSelector({
 }: AttributeSelectorProps) {
   return (
     <div className="space-y-2">
-      <h2 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+      <h2 className="text-sm font-medium text-slate-600">
         属性 <span className="text-xs">※ソロ曲のみ</span>
       </h2>
       <div className="flex flex-wrap gap-2">
@@ -38,16 +38,15 @@ export function AttributeSelector({
                 border transition-all
                 ${
                   isSelected
-                    ? "ring-2 ring-offset-2 ring-blue-500 dark:ring-offset-gray-900"
+                    ? "ring-2 ring-offset-2 ring-shiny-blue"
                     : ""
                 }
-                bg-white border-gray-200 hover:border-gray-300
-                dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-600
+                bg-white border-shiny-blue/20 hover:border-shiny-blue/50
               `}
             >
               <span className={`w-3 h-3 rounded-full ${color}`} />
-              <span className="text-sm font-medium">{label}</span>
-              <span className="text-xs text-gray-500 dark:text-gray-400">
+              <span className="text-sm font-medium text-slate-700">{label}</span>
+              <span className="text-xs text-slate-500">
                 ({count})
               </span>
             </button>

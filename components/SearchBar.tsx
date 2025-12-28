@@ -30,10 +30,10 @@ export function SearchBar({ value, onChange }: SearchBarProps) {
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         placeholder="曲名で検索..."
-        className="w-full px-4 py-2 pl-10 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+        className="w-full px-4 py-2 pl-10 bg-white border border-shiny-blue/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-shiny-blue focus:border-shiny-blue"
       />
       <svg
-        className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+        className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-shiny-blue"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

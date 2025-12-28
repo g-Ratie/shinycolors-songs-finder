@@ -9,23 +9,23 @@ interface SongListProps {
 }
 
 const attributeColors = {
-  stella: "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200",
-  luna: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
-  sol: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+  stella: "bg-pink-100 text-pink-700",
+  luna: "bg-blue-100 text-blue-700",
+  sol: "bg-amber-100 text-amber-700",
 };
 
 export function SongList({ songs }: SongListProps) {
   if (songs.length === 0) {
     return (
-      <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+      <div className="text-center py-12 text-slate-500">
         該当する楽曲がありません
       </div>
     );
   }
 
   return (
-    <div className="space-y-2">
-      <div className="text-sm text-gray-500 dark:text-gray-400">
+    <div className="space-y-3">
+      <div className="text-sm text-slate-600">
         {songs.length}件の楽曲
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -41,9 +41,9 @@ export function SongList({ songs }: SongListProps) {
               href={song.youtube_url ?? undefined}
               target="_blank"
               rel="noopener noreferrer"
-              className={`block bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden transition-colors ${
+              className={`block bg-white rounded-xl border border-shiny-blue/20 overflow-hidden shadow-sm transition-all ${
                 song.youtube_url
-                  ? "hover:border-red-400 dark:hover:border-red-500 cursor-pointer"
+                  ? "hover:shadow-md hover:border-shiny-blue cursor-pointer hover:-translate-y-0.5"
                   : "cursor-default"
               }`}
             >
@@ -56,9 +56,9 @@ export function SongList({ songs }: SongListProps) {
                     className="object-cover"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 hover:opacity-100 transition-opacity">
+                  <div className="absolute inset-0 flex items-center justify-center bg-shiny-blue-dark/40 opacity-0 hover:opacity-100 transition-opacity">
                     <svg
-                      className="w-12 h-12 text-white"
+                      className="w-12 h-12 text-white drop-shadow-lg"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                     >
@@ -68,10 +68,10 @@ export function SongList({ songs }: SongListProps) {
                 </div>
               )}
               <div className="p-3">
-                <h3 className="font-medium text-gray-900 dark:text-white truncate">
+                <h3 className="font-medium text-slate-800 truncate">
                   {song.title}
                 </h3>
-                <div className="mt-1 flex flex-wrap items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+                <div className="mt-1 flex flex-wrap items-center gap-1.5 text-sm text-slate-500">
                   <span>{song.unit.name}</span>
                   {song.member && (
                     <>
@@ -93,7 +93,7 @@ export function SongList({ songs }: SongListProps) {
                     {song.vibe_tags.map((tag) => (
                       <span
                         key={tag.id}
-                        className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded text-xs"
+                        className="px-1.5 py-0.5 bg-shiny-blue/10 text-shiny-blue-dark rounded text-xs"
                       >
                         {tag.name}
                       </span>
