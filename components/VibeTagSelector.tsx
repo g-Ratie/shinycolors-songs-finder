@@ -16,9 +16,9 @@ export function VibeTagSelector({
   onToggle,
 }: VibeTagSelectorProps) {
   return (
-    <div className="space-y-2">
-      <h2 className="text-sm font-medium text-slate-600">
-        その他要素（Vibe）
+    <div className="space-y-3">
+      <h2 className="text-sm font-bold text-slate-700 tracking-wide">
+        Vibe
       </h2>
       <div className="flex flex-wrap gap-2">
         {vibeTags.map((tag) => {
@@ -30,20 +30,22 @@ export function VibeTagSelector({
               key={tag.id}
               onClick={() => onToggle(tag.slug)}
               className={`
-                px-3 py-1.5 rounded-full text-sm
-                border transition-all
+                px-4 py-2 rounded-full text-sm font-medium
+                border-2 transition-all duration-200
                 ${
                   isSelected
-                    ? "bg-shiny-blue text-white border-shiny-blue"
-                    : "bg-white text-slate-700 border-shiny-blue/30 hover:border-shiny-blue"
+                    ? "bg-gradient-to-r from-shiny-blue to-shiny-blue-dark text-white border-shiny-blue shadow-md scale-105"
+                    : "glass-card text-slate-600 border-transparent hover:border-shiny-blue/50 hover:text-shiny-blue-dark"
                 }
               `}
             >
               {tag.name}
               <span
-                className={`ml-1 text-xs ${isSelected ? "text-white/70" : "text-slate-400"}`}
+                className={`ml-1.5 text-xs ${
+                  isSelected ? "text-white/80" : "text-slate-400"
+                }`}
               >
-                ({count})
+                {count}
               </span>
             </button>
           );

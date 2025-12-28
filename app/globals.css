@@ -6,6 +6,8 @@
   --shiny-blue: #8dbbff;
   --shiny-blue-light: #b8d4ff;
   --shiny-blue-dark: #5a9bff;
+  --shiny-pink: #ffc5d9;
+  --shiny-yellow: #fff3b0;
 }
 
 @theme inline {
@@ -14,13 +16,46 @@
   --color-shiny-blue: var(--shiny-blue);
   --color-shiny-blue-light: var(--shiny-blue-light);
   --color-shiny-blue-dark: var(--shiny-blue-dark);
+  --color-shiny-pink: var(--shiny-pink);
+  --color-shiny-yellow: var(--shiny-yellow);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background: linear-gradient(180deg, var(--shiny-blue-light) 0%, var(--background) 30%);
+  background: linear-gradient(180deg, var(--shiny-blue-light) 0%, var(--background) 20%, #ffffff 100%);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
   min-height: 100vh;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(141, 187, 255, 0.2);
 }
