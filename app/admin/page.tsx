@@ -1,0 +1,27 @@
+import Link from "next/link";
+
+export default function AdminPage() {
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <header className="mb-8">
+          <h1 className="text-2xl font-bold text-slate-800">管理画面</h1>
+        </header>
+
+        <nav className="grid gap-4 sm:grid-cols-2">
+          <Link
+            href="/admin/inquiries"
+            className="block p-6 bg-white rounded-lg border border-slate-200 hover:border-shiny-blue transition-colors"
+          >
+            <h2 className="text-lg font-medium text-slate-800">
+              お問い合わせ管理
+            </h2>
+            <p className="mt-1 text-sm text-slate-500">
+              お問い合わせの確認とIssue化
+            </p>
+          </Link>
+        </nav>
+      </div>
+    </div>
+  );
+}
