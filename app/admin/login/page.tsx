@@ -94,10 +94,9 @@ export default function AdminLoginPage() {
 
           <button
             type="submit"
-            disabled={status === "loading"}
-            className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-shiny-blue hover:bg-shiny-blue/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-shiny-blue disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-shiny-blue hover:bg-shiny-blue/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-shiny-blue"
           >
-            {status === "loading" ? "送信中..." : "ログインリンクを送信"}
+            ログインリンクを送信
           </button>
         </form>
       </div>
