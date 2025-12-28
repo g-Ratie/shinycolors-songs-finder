@@ -4,9 +4,8 @@ import { supabase } from "@/lib/supabase";
 import type { Inquiry, InquiryType } from "@/lib/types/database";
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const GITHUB_REPO_OWNER = process.env.GITHUB_REPO_OWNER || "ruribou";
-const GITHUB_REPO_NAME =
-  process.env.GITHUB_REPO_NAME || "shinycolors-songs-finder";
+const GITHUB_REPO_OWNER = process.env.GITHUB_REPO_OWNER;
+const GITHUB_REPO_NAME = process.env.GITHUB_REPO_NAME;
 
 interface CreateIssuesResult {
   success: boolean;
@@ -23,8 +22,8 @@ const inquiryTypeLabels: Record<InquiryType, string> = {
 export async function createGitHubIssues(
   inquiryIds: string[]
 ): Promise<CreateIssuesResult> {
-  if (!GITHUB_TOKEN) {
-    return { success: false, error: "GitHub Tokenが設定されていません" };
+  if (!GITHUB_TOKEN || !GITHUB_REPO_OWNER || !GITHUB_REPO_NAME) {
+    return { success: false, error: "GitHub環境変数が設定されていません" };
   }
 
   const { data: inquiries, error: fetchError } = await supabase
