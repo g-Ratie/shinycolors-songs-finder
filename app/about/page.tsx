@@ -68,6 +68,26 @@ export default function AboutPage() {
               </Link>
             </div>
           </section>
+
+          <section className="bg-white rounded-xl border border-shiny-blue/20 p-6 shadow-sm">
+            <h2 className="text-lg font-bold text-slate-800 mb-4">
+              運営・開発
+            </h2>
+            <div className="text-slate-600 text-sm">
+              <p>
+                運営・開発は
+                <a
+                  href="https://x.com/ruribou177"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-shiny-blue hover:text-shiny-blue-dark underline"
+                >
+                  るりいろぼうや
+                </a>
+                が行っています。
+              </p>
+            </div>
+          </section>
         </main>
       </div>
     </div>
