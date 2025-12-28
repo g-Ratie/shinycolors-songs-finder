@@ -17,9 +17,9 @@ interface PageProps {
 }
 
 const songTypes: { value: SongType; label: string }[] = [
-  { value: "unit", label: "ユニット曲" },
-  { value: "solo", label: "ソロ曲" },
-  { value: "collaboration", label: "コラボ曲" },
+  { value: "unit", label: "ユニット" },
+  { value: "solo", label: "ソロ" },
+  { value: "collaboration", label: "コラボ" },
   { value: "other", label: "その他" },
 ];
 
@@ -194,7 +194,6 @@ export default function EditSongPage({ params }: PageProps) {
                     setFormData({
                       ...formData,
                       unit_id: e.target.value,
-                      member_id: "",
                     })
                   }
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-shiny-blue"
