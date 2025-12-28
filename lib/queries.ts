@@ -56,7 +56,15 @@ export async function getSongs(
   }
 
   if (filters.attribute) {
-    query = query.eq("attribute", filters.attribute);
+    const { data: membersWithAttr } = await supabase
+      .from("members")
+      .select("id")
+      .eq("attribute", filters.attribute);
+    if (membersWithAttr && membersWithAttr.length > 0) {
+      query = query.in("member_id", membersWithAttr.map((m) => m.id));
+    } else {
+      return [];
+    }
   }
 
   if (filters.searchQuery) {
@@ -119,8 +127,9 @@ export async function getSongCounts(
   }
 
   for (const song of songsForAttrs) {
-    if (song.attribute) {
-      counts.attributes[song.attribute]++;
+    const attr = song.member?.attribute;
+    if (attr) {
+      counts.attributes[attr]++;
     }
   }
 

@@ -2,7 +2,7 @@
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
-import type { SongType, AttributeType, Song } from "@/lib/types/database";
+import type { SongType, Song } from "@/lib/types/database";
 import { canPublishSong } from "@/lib/types/database";
 
 interface SongInput {
@@ -10,7 +10,6 @@ interface SongInput {
   unit_id: string | null;
   member_id: string | null;
   song_type: SongType;
-  attribute: AttributeType | null;
   youtube_url: string | null;
   vibe_tag_ids: string[];
 }
@@ -126,7 +125,7 @@ export async function togglePublishSong(id: string): Promise<ActionResult> {
   if (!song.is_published && !canPublishSong(song as Song)) {
     return {
       success: false,
-      error: "公開に必要な項目が未設定です（ユニット、YouTube URL、ソロ曲の場合はメンバーと属性）",
+      error: "公開に必要な項目が未設定です（ユニット、YouTube URL、ソロ曲の場合はメンバー）",
     };
   }
 

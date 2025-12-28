@@ -18,6 +18,7 @@ export interface Member {
   id: string;
   name: string;
   sort_order: number;
+  attribute: AttributeType;
   member_units?: MemberUnit[];
   units?: Unit[];
 }
@@ -35,7 +36,6 @@ export interface Song {
   unit_id: string | null;
   member_id: string | null;
   song_type: SongType;
-  attribute: AttributeType | null;
   youtube_url: string | null;
   links: Record<string, string>;
   is_published: boolean;
@@ -56,7 +56,7 @@ export function canPublishSong(song: Song): boolean {
   if (!song.title || !song.unit_id || !song.youtube_url) {
     return false;
   }
-  if (song.song_type === "solo" && (!song.member_id || !song.attribute)) {
+  if (song.song_type === "solo" && !song.member_id) {
     return false;
   }
   return true;

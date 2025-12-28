@@ -1,20 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import type {
   SongWithRelations,
   Unit,
   VibeTag,
   SongType,
-  AttributeType,
 } from "@/lib/types/database";
-import { createSong, updateSong, deleteSong, togglePublishSong } from "./actions";
+import { createSong, deleteSong, togglePublishSong } from "./actions";
 import { canPublishSong } from "@/lib/types/database";
 
 interface Member {
   id: string;
   name: string;
-  unit_id: string;
+  attribute: string;
 }
 
 interface SongTableProps {
@@ -31,15 +31,8 @@ const songTypes: { value: SongType; label: string }[] = [
   { value: "other", label: "その他" },
 ];
 
-const attributes: { value: AttributeType; label: string }[] = [
-  { value: "stella", label: "Stella" },
-  { value: "luna", label: "Luna" },
-  { value: "sol", label: "Sol" },
-];
-
 export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingSong, setEditingSong] = useState<SongWithRelations | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
@@ -51,7 +44,6 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
     unit_id: "",
     member_id: "",
     song_type: "unit" as SongType,
-    attribute: "" as AttributeType | "",
     youtube_url: "",
     vibe_tag_ids: [] as string[],
   });
@@ -62,29 +54,13 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
       unit_id: "",
       member_id: "",
       song_type: "unit",
-      attribute: "",
       youtube_url: "",
       vibe_tag_ids: [],
     });
-    setEditingSong(null);
   };
 
   const openCreateForm = () => {
     resetForm();
-    setIsFormOpen(true);
-  };
-
-  const openEditForm = (song: SongWithRelations) => {
-    setFormData({
-      title: song.title,
-      unit_id: song.unit_id || "",
-      member_id: song.member_id || "",
-      song_type: song.song_type,
-      attribute: song.attribute || "",
-      youtube_url: song.youtube_url || "",
-      vibe_tag_ids: song.vibe_tags.map((t) => t.id),
-    });
-    setEditingSong(song);
     setIsFormOpen(true);
   };
 
@@ -110,20 +86,14 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
       unit_id: formData.unit_id || null,
       member_id: formData.member_id || null,
       song_type: formData.song_type,
-      attribute: formData.attribute || null,
       youtube_url: formData.youtube_url || null,
       vibe_tag_ids: formData.vibe_tag_ids,
     };
 
-    const result = editingSong
-      ? await updateSong(editingSong.id, input)
-      : await createSong(input);
+    const result = await createSong(input);
 
     if (result.success) {
-      setMessage({
-        type: "success",
-        text: editingSong ? "楽曲を更新しました" : "楽曲を追加しました",
-      });
+      setMessage({ type: "success", text: "楽曲を追加しました" });
       setIsFormOpen(false);
       resetForm();
     } else {
@@ -143,8 +113,6 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
       setMessage({ type: "error", text: result.error || "削除に失敗しました" });
     }
   };
-
-  const filteredMembers = members.filter((m) => m.unit_id === formData.unit_id);
 
   return (
     <div className="space-y-4">
@@ -172,7 +140,7 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
       {isFormOpen && (
         <div className="bg-white rounded-lg border border-slate-200 p-6">
           <h2 className="text-lg font-medium text-slate-800 mb-4">
-            {editingSong ? "楽曲を編集" : "楽曲を追加"}
+            楽曲を追加
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
@@ -252,38 +220,15 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
                   ))}
                 </select>
               </div>
-              {formData.song_type === "solo" && (
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    属性
-                  </label>
-                  <select
-                    value={formData.attribute}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        attribute: e.target.value as AttributeType | "",
-                      })
-                    }
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-shiny-blue"
-                  >
-                    <option value="">なし</option>
-                    {attributes.map((attr) => (
-                      <option key={attr.value} value={attr.value}>
-                        {attr.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-            </div>
+              </div>
 
-            {formData.song_type === "solo" && filteredMembers.length > 0 && (
+            {formData.song_type === "solo" && (
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  メンバー
+                  メンバー <span className="text-red-500">*</span>
                 </label>
                 <select
+                  required
                   value={formData.member_id}
                   onChange={(e) =>
                     setFormData({ ...formData, member_id: e.target.value })
@@ -291,7 +236,7 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-shiny-blue"
                 >
                   <option value="">選択してください</option>
-                  {filteredMembers.map((member) => (
+                  {members.map((member) => (
                     <option key={member.id} value={member.id}>
                       {member.name}
                     </option>
@@ -346,11 +291,7 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
                 disabled={isSubmitting}
                 className="px-4 py-2 bg-shiny-blue text-white rounded-lg hover:bg-shiny-blue-dark transition-colors disabled:opacity-50 text-sm font-medium"
               >
-                {isSubmitting
-                  ? "保存中..."
-                  : editingSong
-                    ? "更新する"
-                    : "追加する"}
+                {isSubmitting ? "保存中..." : "追加する"}
               </button>
               <button
                 type="button"
@@ -396,14 +337,14 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
               const publishable = canPublishSong(song);
               return (
                 <tr key={song.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     {song.is_published ? (
-                      <span className="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-medium">
-                        公開中
+                      <span className="inline-block w-12 text-center px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-medium">
+                        公開
                       </span>
                     ) : (
-                      <span className="px-2 py-1 bg-slate-100 text-slate-500 rounded text-xs font-medium">
-                        非公開
+                      <span className="inline-block w-12 text-center px-2 py-1 bg-slate-100 text-slate-500 rounded text-xs font-medium">
+                        下書き
                       </span>
                     )}
                   </td>
@@ -415,7 +356,7 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
                   </td>
                   <td className="px-4 py-3 text-sm text-slate-600">
                     {songTypes.find((t) => t.value === song.song_type)?.label}
-                    {song.attribute && ` (${song.attribute})`}
+                    {song.member && ` / ${song.member.name}`}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-1">
@@ -434,12 +375,12 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
                       )}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-right">
-                    <div className="flex justify-end gap-2">
+                  <td className="px-4 py-3 text-right whitespace-nowrap">
+                    <div className="flex justify-end gap-1">
                       <button
                         onClick={() => handleTogglePublish(song)}
                         disabled={!song.is_published && !publishable}
-                        className={`px-3 py-1 text-sm rounded ${
+                        className={`px-2 py-1 text-xs rounded ${
                           song.is_published
                             ? "text-orange-600 hover:text-orange-700"
                             : publishable
@@ -448,17 +389,17 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
                         }`}
                         title={!song.is_published && !publishable ? "公開に必要な項目が未設定です" : ""}
                       >
-                        {song.is_published ? "非公開" : "公開"}
+                        {song.is_published ? "下書きに戻す" : "公開"}
                       </button>
-                      <button
-                        onClick={() => openEditForm(song)}
-                        className="px-3 py-1 text-sm text-shiny-blue-dark hover:text-shiny-blue"
+                      <Link
+                        href={`/admin/songs/${song.id}/edit`}
+                        className="px-2 py-1 text-xs text-shiny-blue-dark hover:text-shiny-blue"
                       >
                         編集
-                      </button>
+                      </Link>
                       <button
                         onClick={() => handleDelete(song.id)}
-                        className="px-3 py-1 text-sm text-red-600 hover:text-red-700"
+                        className="px-2 py-1 text-xs text-red-600 hover:text-red-700"
                       >
                         削除
                       </button>
