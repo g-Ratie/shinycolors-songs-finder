@@ -25,9 +25,9 @@ interface SongTableProps {
 }
 
 const songTypes: { value: SongType; label: string }[] = [
-  { value: "unit", label: "ユニット曲" },
-  { value: "solo", label: "ソロ曲" },
-  { value: "collaboration", label: "コラボ曲" },
+  { value: "unit", label: "ユニット" },
+  { value: "solo", label: "ソロ" },
+  { value: "collaboration", label: "コラボ" },
   { value: "other", label: "その他" },
 ];
 
@@ -322,7 +322,7 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
                 ユニット
               </th>
               <th className="px-4 py-3 text-left text-sm font-medium text-slate-700">
-                タイプ
+                曲のタイプ
               </th>
               <th className="px-4 py-3 text-left text-sm font-medium text-slate-700">
                 タグ
