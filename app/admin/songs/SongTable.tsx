@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import type {
   SongWithRelations,
   Unit,
   VibeTag,
   SongType,
 } from "@/lib/types/database";
-import { createSong, updateSong, deleteSong, togglePublishSong } from "./actions";
+import { createSong, deleteSong, togglePublishSong } from "./actions";
 import { canPublishSong } from "@/lib/types/database";
 
 interface Member {
@@ -32,7 +33,6 @@ const songTypes: { value: SongType; label: string }[] = [
 
 export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingSong, setEditingSong] = useState<SongWithRelations | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
@@ -57,24 +57,10 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
       youtube_url: "",
       vibe_tag_ids: [],
     });
-    setEditingSong(null);
   };
 
   const openCreateForm = () => {
     resetForm();
-    setIsFormOpen(true);
-  };
-
-  const openEditForm = (song: SongWithRelations) => {
-    setFormData({
-      title: song.title,
-      unit_id: song.unit_id || "",
-      member_id: song.member_id || "",
-      song_type: song.song_type,
-      youtube_url: song.youtube_url || "",
-      vibe_tag_ids: song.vibe_tags.map((t) => t.id),
-    });
-    setEditingSong(song);
     setIsFormOpen(true);
   };
 
@@ -104,15 +90,10 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
       vibe_tag_ids: formData.vibe_tag_ids,
     };
 
-    const result = editingSong
-      ? await updateSong(editingSong.id, input)
-      : await createSong(input);
+    const result = await createSong(input);
 
     if (result.success) {
-      setMessage({
-        type: "success",
-        text: editingSong ? "楽曲を更新しました" : "楽曲を追加しました",
-      });
+      setMessage({ type: "success", text: "楽曲を追加しました" });
       setIsFormOpen(false);
       resetForm();
     } else {
@@ -159,7 +140,7 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
       {isFormOpen && (
         <div className="bg-white rounded-lg border border-slate-200 p-6">
           <h2 className="text-lg font-medium text-slate-800 mb-4">
-            {editingSong ? "楽曲を編集" : "楽曲を追加"}
+            楽曲を追加
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
@@ -310,11 +291,7 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
                 disabled={isSubmitting}
                 className="px-4 py-2 bg-shiny-blue text-white rounded-lg hover:bg-shiny-blue-dark transition-colors disabled:opacity-50 text-sm font-medium"
               >
-                {isSubmitting
-                  ? "保存中..."
-                  : editingSong
-                    ? "更新する"
-                    : "追加する"}
+                {isSubmitting ? "保存中..." : "追加する"}
               </button>
               <button
                 type="button"
@@ -414,12 +391,12 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
                       >
                         {song.is_published ? "下書きに戻す" : "公開"}
                       </button>
-                      <button
-                        onClick={() => openEditForm(song)}
+                      <Link
+                        href={`/admin/songs/${song.id}/edit`}
                         className="px-2 py-1 text-xs text-shiny-blue-dark hover:text-shiny-blue"
                       >
                         編集
-                      </button>
+                      </Link>
                       <button
                         onClick={() => handleDelete(song.id)}
                         className="px-2 py-1 text-xs text-red-600 hover:text-red-700"
