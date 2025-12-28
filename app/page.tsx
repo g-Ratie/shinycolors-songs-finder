@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { getUnits, getVibeTags } from "@/lib/queries";
 import { SongFinderClient } from "@/components/SongFinderClient";
 
@@ -20,7 +21,9 @@ export default async function Home() {
           </p>
         </header>
 
-        <SongFinderClient initialUnits={units} initialVibeTags={vibeTags} />
+        <Suspense fallback={<div className="text-center py-8">読み込み中...</div>}>
+          <SongFinderClient initialUnits={units} initialVibeTags={vibeTags} />
+        </Suspense>
       </div>
 
       <footer className="py-8 text-center text-sm text-slate-500 bg-white/50 border-t border-shiny-blue/10">
