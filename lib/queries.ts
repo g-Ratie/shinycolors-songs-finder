@@ -92,37 +92,32 @@ export interface CountResult {
   total: number;
 }
 
-export async function getSongCounts(): Promise<CountResult> {
-  const { data: songs, error } = await supabase.from("songs").select(`
-      unit:units(slug),
-      attribute,
-      vibe_tags:song_vibe_tags(vibe_tag:vibe_tags(slug))
-    `);
-
-  if (error) throw error;
+export async function getSongCounts(
+  filters: SongFilters = {}
+): Promise<CountResult> {
+  const filteredSongs = await getSongs(filters);
 
   const counts: CountResult = {
     units: {},
     attributes: { stella: 0, luna: 0, sol: 0 },
     vibeTags: {},
-    total: songs?.length ?? 0,
+    total: filteredSongs.length,
   };
 
-  for (const song of songs ?? []) {
-    const unitSlug = (song.unit as { slug: string } | null)?.slug;
+  for (const song of filteredSongs) {
+    const unitSlug = song.unit?.slug;
     if (unitSlug) {
       counts.units[unitSlug] = (counts.units[unitSlug] ?? 0) + 1;
     }
 
     if (song.attribute) {
-      counts.attributes[song.attribute as AttributeType]++;
+      counts.attributes[song.attribute]++;
     }
 
-    for (const svt of song.vibe_tags ?? []) {
-      const vibeTagSlug = (svt as { vibe_tag: { slug: string } }).vibe_tag
-        ?.slug;
-      if (vibeTagSlug) {
-        counts.vibeTags[vibeTagSlug] = (counts.vibeTags[vibeTagSlug] ?? 0) + 1;
+    for (const vibeTag of song.vibe_tags ?? []) {
+      if (vibeTag.slug) {
+        counts.vibeTags[vibeTag.slug] =
+          (counts.vibeTags[vibeTag.slug] ?? 0) + 1;
       }
     }
   }

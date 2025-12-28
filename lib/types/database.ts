@@ -34,7 +34,7 @@ export interface Song {
   created_at: string;
   updated_at: string;
   unit?: Unit;
-  member?: Member;
+  member?: Member | null;
   vibe_tags?: VibeTag[];
 }
 
