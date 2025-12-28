@@ -1,6 +1,6 @@
 "use server";
 
-import { supabase } from "@/lib/supabase";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 
 function generateSlug(name: string): string {
@@ -12,6 +12,7 @@ function generateSlug(name: string): string {
 }
 
 export async function createUnit(name: string) {
+  const supabase = createAdminClient();
   const slug = generateSlug(name);
 
   const { error } = await supabase.from("units").insert({ name, slug });
@@ -27,6 +28,7 @@ export async function createUnit(name: string) {
 }
 
 export async function updateUnit(id: string, name: string) {
+  const supabase = createAdminClient();
   const slug = generateSlug(name);
 
   const { error } = await supabase
@@ -45,6 +47,7 @@ export async function updateUnit(id: string, name: string) {
 }
 
 export async function deleteUnit(id: string) {
+  const supabase = createAdminClient();
   const { error } = await supabase.from("units").delete().eq("id", id);
 
   if (error) {

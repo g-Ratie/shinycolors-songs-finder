@@ -1,6 +1,6 @@
 "use server";
 
-import { supabase } from "@/lib/supabase";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 import type { SongType, AttributeType } from "@/lib/types/database";
 
@@ -20,6 +20,7 @@ interface ActionResult {
 }
 
 export async function createSong(input: SongInput): Promise<ActionResult> {
+  const supabase = createAdminClient();
   const { vibe_tag_ids, ...songData } = input;
 
   const { data: song, error: songError } = await supabase
@@ -56,6 +57,7 @@ export async function updateSong(
   id: string,
   input: SongInput
 ): Promise<ActionResult> {
+  const supabase = createAdminClient();
   const { vibe_tag_ids, ...songData } = input;
 
   const { error: songError } = await supabase
@@ -91,7 +93,7 @@ export async function updateSong(
 }
 
 export async function deleteSong(id: string): Promise<ActionResult> {
-  // 先にタグの紐付けを削除
+  const supabase = createAdminClient();
   await supabase.from("song_vibe_tags").delete().eq("song_id", id);
 
   const { error } = await supabase.from("songs").delete().eq("id", id);
