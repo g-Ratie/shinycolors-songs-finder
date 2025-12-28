@@ -91,7 +91,7 @@ export function SongList({ songs }: SongListProps) {
                   {song.title}
                 </h3>
                 <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-slate-600">
-                  <span className="font-medium">{song.unit.name}</span>
+                  <span className="font-medium">{song.unit?.name}</span>
                   {song.member && (
                     <>
                       <span className="text-slate-300">/</span>

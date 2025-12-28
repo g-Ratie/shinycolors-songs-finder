@@ -2,15 +2,16 @@
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
-import type { SongType, AttributeType } from "@/lib/types/database";
+import type { SongType, AttributeType, Song } from "@/lib/types/database";
+import { canPublishSong } from "@/lib/types/database";
 
 interface SongInput {
   title: string;
-  unit_id: string;
+  unit_id: string | null;
   member_id: string | null;
   song_type: SongType;
   attribute: AttributeType | null;
-  youtube_url: string;
+  youtube_url: string | null;
   vibe_tag_ids: string[];
 }
 
@@ -101,6 +102,42 @@ export async function deleteSong(id: string): Promise<ActionResult> {
   if (error) {
     console.error("Failed to delete song:", error);
     return { success: false, error: "楽曲の削除に失敗しました" };
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin/songs");
+
+  return { success: true };
+}
+
+export async function togglePublishSong(id: string): Promise<ActionResult> {
+  const supabase = createAdminClient();
+
+  const { data: song, error: fetchError } = await supabase
+    .from("songs")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (fetchError || !song) {
+    return { success: false, error: "楽曲が見つかりません" };
+  }
+
+  if (!song.is_published && !canPublishSong(song as Song)) {
+    return {
+      success: false,
+      error: "公開に必要な項目が未設定です（ユニット、YouTube URL、ソロ曲の場合はメンバーと属性）",
+    };
+  }
+
+  const { error } = await supabase
+    .from("songs")
+    .update({ is_published: !song.is_published })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Failed to toggle publish:", error);
+    return { success: false, error: "公開状態の変更に失敗しました" };
   }
 
   revalidatePath("/");
