@@ -21,7 +21,7 @@ export default function AboutPage() {
             <h2 className="text-lg font-bold text-slate-800 mb-4">
               シャニマス楽曲検索とは
             </h2>
-            <div className="space-y-3 text-slate-600">
+            <div className="space-y-3 text-slate-600 text-sm">
               <p>
                 シャニマス楽曲検索は、アイドルマスター シャイニーカラーズの楽曲を
                 ユニット、属性、雰囲気などの条件で検索できる非公式ファンサイトです。
@@ -54,7 +54,7 @@ export default function AboutPage() {
             <h2 className="text-lg font-bold text-slate-800 mb-4">
               お問い合わせ
             </h2>
-            <div className="space-y-3 text-slate-600">
+            <div className="space-y-3 text-slate-600 text-sm">
               <p>
                 機能のリクエストやバグ報告、その他のお問い合わせは
                 下記のフォームからお送りください。
