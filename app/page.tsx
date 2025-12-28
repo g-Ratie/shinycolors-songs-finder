@@ -19,6 +19,20 @@ export default async function Home() {
           <p className="mt-4 text-slate-600">
             ユニット、属性、タグで楽曲を検索できます
           </p>
+          <div className="mt-4 flex justify-center gap-6 text-sm text-slate-500">
+            <Link
+              href="/about"
+              className="hover:text-shiny-blue-dark transition-colors"
+            >
+              このサイトについて
+            </Link>
+            <Link
+              href="/contact"
+              className="hover:text-shiny-blue-dark transition-colors"
+            >
+              お問い合わせ
+            </Link>
+          </div>
         </header>
 
         <Suspense fallback={<div className="text-center py-8">読み込み中...</div>}>
@@ -26,22 +40,6 @@ export default async function Home() {
         </Suspense>
       </div>
 
-      <footer className="py-8 text-center text-sm text-slate-500 bg-white/50 border-t border-shiny-blue/10">
-        <div className="flex justify-center gap-8">
-          <Link
-            href="/about"
-            className="hover:text-shiny-blue-dark transition-colors"
-          >
-            このサイトについて
-          </Link>
-          <Link
-            href="/contact"
-            className="hover:text-shiny-blue-dark transition-colors"
-          >
-            お問い合わせ
-          </Link>
-        </div>
-      </footer>
     </div>
   );
 }
