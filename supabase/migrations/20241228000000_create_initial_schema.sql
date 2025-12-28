@@ -11,6 +11,17 @@ create table units (
 
 comment on table units is 'シャニマスのユニット一覧（固定マスタ）';
 
+-- members: アイドル/メンバーマスタ（固定データ）
+create table members (
+  id uuid primary key default gen_random_uuid(),
+  name text not null unique,
+  unit_id uuid not null references units(id) on delete restrict,
+  sort_order int not null default 0,
+  created_at timestamptz not null default now()
+);
+
+comment on table members is 'シャニマスのアイドル一覧（固定マスタ）';
+
 -- songs: 楽曲テーブル
 create type song_type as enum ('unit', 'solo', 'collaboration', 'other');
 create type attribute_type as enum ('stella', 'luna', 'sol');
@@ -19,6 +30,7 @@ create table songs (
   id uuid primary key default gen_random_uuid(),
   title text not null,
   unit_id uuid not null references units(id) on delete restrict,
+  member_id uuid references members(id) on delete restrict,
   song_type song_type not null default 'unit',
   attribute attribute_type,
   youtube_url text,
@@ -30,10 +42,16 @@ create table songs (
   constraint songs_attribute_solo_only check (
     (song_type = 'solo' and attribute is not null) or
     (song_type != 'solo' and attribute is null)
+  ),
+  -- ソロ曲の場合はmember_idが必須
+  constraint songs_member_solo_only check (
+    (song_type = 'solo' and member_id is not null) or
+    (song_type != 'solo' and member_id is null)
   )
 );
 
 comment on table songs is '楽曲データ';
+comment on column songs.member_id is 'ソロ曲の場合のアイドル';
 comment on column songs.attribute is 'ソロ曲のみ設定可能（Stella/Luna/Sol）';
 comment on column songs.links is '外部リンク（公式、配信サービス等）';
 
@@ -73,7 +91,9 @@ create table song_vibe_tags (
 comment on table song_vibe_tags is '楽曲とVibeタグの関連付け';
 
 -- インデックス
+create index members_unit_id_idx on members(unit_id);
 create index songs_unit_id_idx on songs(unit_id);
+create index songs_member_id_idx on songs(member_id) where member_id is not null;
 create index songs_song_type_idx on songs(song_type);
 create index songs_attribute_idx on songs(attribute) where attribute is not null;
 create index songs_title_idx on songs using gin(title gin_trgm_ops);
