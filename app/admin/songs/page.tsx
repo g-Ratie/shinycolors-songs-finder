@@ -32,8 +32,7 @@ async function getMembers() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("members")
-    .select("*, unit:units(*)")
-    .order("unit_id")
+    .select("*")
     .order("sort_order");
 
   if (error) throw error;
