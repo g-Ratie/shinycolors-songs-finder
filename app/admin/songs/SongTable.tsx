@@ -247,41 +247,48 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                タグ
+                タグ（3つまで）
               </label>
               <div className="flex flex-wrap gap-2">
-                {vibeTags.map((tag) => (
-                  <label
-                    key={tag.id}
-                    className={`px-3 py-1.5 rounded-full text-sm cursor-pointer transition-colors ${
-                      formData.vibe_tag_ids.includes(tag.id)
-                        ? "bg-shiny-blue text-white"
-                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      className="hidden"
-                      checked={formData.vibe_tag_ids.includes(tag.id)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setFormData({
-                            ...formData,
-                            vibe_tag_ids: [...formData.vibe_tag_ids, tag.id],
-                          });
-                        } else {
-                          setFormData({
-                            ...formData,
-                            vibe_tag_ids: formData.vibe_tag_ids.filter(
-                              (id) => id !== tag.id
-                            ),
-                          });
-                        }
-                      }}
-                    />
-                    {tag.name}
-                  </label>
-                ))}
+                {vibeTags.map((tag) => {
+                  const isSelected = formData.vibe_tag_ids.includes(tag.id);
+                  const isDisabled = !isSelected && formData.vibe_tag_ids.length >= 3;
+                  return (
+                    <label
+                      key={tag.id}
+                      className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
+                        isSelected
+                          ? "bg-shiny-blue text-white cursor-pointer"
+                          : isDisabled
+                            ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                            : "bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        className="hidden"
+                        checked={isSelected}
+                        disabled={isDisabled}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setFormData({
+                              ...formData,
+                              vibe_tag_ids: [...formData.vibe_tag_ids, tag.id],
+                            });
+                          } else {
+                            setFormData({
+                              ...formData,
+                              vibe_tag_ids: formData.vibe_tag_ids.filter(
+                                (id) => id !== tag.id
+                              ),
+                            });
+                          }
+                        }}
+                      />
+                      {tag.name}
+                    </label>
+                  );
+                })}
               </div>
             </div>
 
