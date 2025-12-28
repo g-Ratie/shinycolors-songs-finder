@@ -1,28 +1,33 @@
 import "server-only";
-
-interface RateLimitEntry {
-  count: number;
-  resetAt: number;
-}
-
-const store = new Map<string, RateLimitEntry>();
+import { createAdminClient } from "@/lib/supabase/admin";
 
 const WINDOW_MS = 60 * 1000;
 const MAX_REQUESTS = 3;
 
-export function checkRateLimit(key: string): { allowed: boolean; remaining: number } {
-  const now = Date.now();
-  const entry = store.get(key);
+export async function checkRateLimit(
+  key: string
+): Promise<{ allowed: boolean; remaining: number }> {
+  const supabase = createAdminClient();
+  const windowStart = new Date(Date.now() - WINDOW_MS).toISOString();
 
-  if (!entry || now > entry.resetAt) {
-    store.set(key, { count: 1, resetAt: now + WINDOW_MS });
-    return { allowed: true, remaining: MAX_REQUESTS - 1 };
-  }
+  const { count } = await supabase
+    .from("rate_limit_attempts")
+    .select("*", { count: "exact", head: true })
+    .eq("key", key)
+    .gte("attempted_at", windowStart);
 
-  if (entry.count >= MAX_REQUESTS) {
+  const currentCount = count ?? 0;
+
+  if (currentCount >= MAX_REQUESTS) {
     return { allowed: false, remaining: 0 };
   }
 
-  entry.count++;
-  return { allowed: true, remaining: MAX_REQUESTS - entry.count };
+  await supabase.from("rate_limit_attempts").insert({ key });
+
+  await supabase
+    .from("rate_limit_attempts")
+    .delete()
+    .lt("attempted_at", windowStart);
+
+  return { allowed: true, remaining: MAX_REQUESTS - currentCount - 1 };
 }

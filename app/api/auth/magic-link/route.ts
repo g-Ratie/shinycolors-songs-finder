@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   const headersList = await headers();
   const ip = headersList.get("x-forwarded-for") || "unknown";
 
-  const ipLimit = checkRateLimit(`ip:${ip}`);
+  const ipLimit = await checkRateLimit(`ip:${ip}`);
   if (!ipLimit.allowed) {
     return NextResponse.json(
       { error: "リクエストが多すぎます。しばらく待ってから再度お試しください。" },
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const emailLimit = checkRateLimit(`email:${email}`);
+  const emailLimit = await checkRateLimit(`email:${email}`);
   if (!emailLimit.allowed) {
     return NextResponse.json(
       { error: "リクエストが多すぎます。しばらく待ってから再度お試しください。" },
