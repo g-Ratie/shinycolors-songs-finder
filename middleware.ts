@@ -1,27 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
-import { createClient } from "@supabase/supabase-js";
-
-async function isAdminEmail(email: string): Promise<boolean> {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    }
-  );
-
-  const { data } = await supabase
-    .from("admin_emails")
-    .select("id")
-    .eq("email", email)
-    .single();
-
-  return !!data;
-}
+import { isAdmin } from "@/lib/auth/admin";
 
 export async function middleware(request: NextRequest) {
   const { supabaseResponse, user } = await updateSession(request);
@@ -40,7 +19,7 @@ export async function middleware(request: NextRequest) {
       return new NextResponse("Forbidden", { status: 403 });
     }
 
-    const admin = await isAdminEmail(user.email);
+    const admin = await isAdmin(user.email);
     if (!admin) {
       return new NextResponse("Forbidden", { status: 403 });
     }
