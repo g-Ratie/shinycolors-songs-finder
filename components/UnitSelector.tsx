@@ -35,11 +35,11 @@ export function UnitSelector({
   onSelect,
 }: UnitSelectorProps) {
   return (
-    <div className="space-y-2">
-      <h2 className="text-sm font-medium text-slate-600">
+    <div className="space-y-3">
+      <h2 className="text-sm font-bold text-slate-700 tracking-wide">
         ユニット
       </h2>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-3">
         {units.map((unit) => {
           const Icon = unitIconMap[unit.slug];
           const count = counts[unit.slug] ?? 0;
@@ -50,25 +50,33 @@ export function UnitSelector({
               key={unit.id}
               onClick={() => onSelect(unit.slug)}
               className={`
-                flex items-center gap-2 px-3 py-2 rounded-lg
-                border transition-all
+                flex items-center gap-3 px-5 py-3.5 rounded-2xl
+                border-2 transition-all duration-200
                 ${
                   isSelected
-                    ? "bg-shiny-blue/20 border-shiny-blue shadow-sm"
-                    : "bg-white border-shiny-blue/20 hover:border-shiny-blue/50"
+                    ? "bg-gradient-to-r from-shiny-blue/30 to-shiny-blue/20 border-shiny-blue shadow-md scale-105"
+                    : "glass-card border-transparent hover:border-shiny-blue/50 hover:shadow-sm"
                 }
               `}
             >
               {Icon ? (
-                <Icon size={24} />
+                <div className={`transition-transform duration-200 ${isSelected ? "scale-110" : ""}`}>
+                  <Icon size={40} />
+                </div>
               ) : (
-                <span className="w-6 h-6 flex items-center justify-center text-xs bg-shiny-blue/20 rounded">
+                <span className="w-10 h-10 flex items-center justify-center text-sm font-bold bg-shiny-blue/20 text-shiny-blue-dark rounded-xl">
                   {unit.name.charAt(0)}
                 </span>
               )}
-              <span className="text-sm font-medium text-slate-700">{unit.name}</span>
-              <span className="text-xs text-slate-500">
-                ({count})
+              <span className={`text-base font-medium ${isSelected ? "text-shiny-blue-dark" : "text-slate-700"}`}>
+                {unit.name}
+              </span>
+              <span className={`text-sm px-2 py-1 rounded-full ${
+                isSelected
+                  ? "bg-shiny-blue text-white"
+                  : "bg-slate-100 text-slate-500"
+              }`}>
+                {count}
               </span>
             </button>
           );

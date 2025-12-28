@@ -11,77 +11,136 @@ insert into units (name, slug) values
   ('シャイニーカラーズ', 'shinycolors');
 
 -- メンバー（アイドル）マスタデータ
+insert into members (name, sort_order) values
+  ('櫻木真乃', 1),
+  ('風野灯織', 2),
+  ('八宮めぐる', 3),
+  ('月岡恋鐘', 4),
+  ('田中摩美々', 5),
+  ('白瀬咲耶', 6),
+  ('三峰結華', 7),
+  ('幽谷霧子', 8),
+  ('小宮果穂', 9),
+  ('園田智代子', 10),
+  ('西城樹里', 11),
+  ('杜野凛世', 12),
+  ('有栖川夏葉', 13),
+  ('大崎甘奈', 14),
+  ('大崎甜花', 15),
+  ('桑山千雪', 16),
+  ('芹沢あさひ', 17),
+  ('黛冬優子', 18),
+  ('和泉愛依', 19),
+  ('浅倉透', 20),
+  ('樋口円香', 21),
+  ('福丸小糸', 22),
+  ('市川雛菜', 23),
+  ('七草にちか', 24),
+  ('緋田美琴', 25),
+  ('斑鳩ルカ', 26),
+  ('鈴木羽那', 27),
+  ('郁田はるき', 28);
+
+-- メンバーとユニットの関連付け
 -- illumination STARS
-insert into members (name, unit_id, sort_order)
-select '櫻木真乃', id, 1 from units where slug = 'illumination-stars';
-insert into members (name, unit_id, sort_order)
-select '風野灯織', id, 2 from units where slug = 'illumination-stars';
-insert into members (name, unit_id, sort_order)
-select '八宮めぐる', id, 3 from units where slug = 'illumination-stars';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '櫻木真乃' and u.slug = 'illumination-stars';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '風野灯織' and u.slug = 'illumination-stars';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '八宮めぐる' and u.slug = 'illumination-stars';
 
 -- L'Antica
-insert into members (name, unit_id, sort_order)
-select '月岡恋鐘', id, 1 from units where slug = 'lantica';
-insert into members (name, unit_id, sort_order)
-select '田中摩美々', id, 2 from units where slug = 'lantica';
-insert into members (name, unit_id, sort_order)
-select '白瀬咲耶', id, 3 from units where slug = 'lantica';
-insert into members (name, unit_id, sort_order)
-select '三峰結華', id, 4 from units where slug = 'lantica';
-insert into members (name, unit_id, sort_order)
-select '幽谷霧子', id, 5 from units where slug = 'lantica';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '月岡恋鐘' and u.slug = 'lantica';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '田中摩美々' and u.slug = 'lantica';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '白瀬咲耶' and u.slug = 'lantica';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '三峰結華' and u.slug = 'lantica';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '幽谷霧子' and u.slug = 'lantica';
 
 -- 放課後クライマックスガールズ
-insert into members (name, unit_id, sort_order)
-select '小宮果穂', id, 1 from units where slug = 'houkago-climax-girls';
-insert into members (name, unit_id, sort_order)
-select '園田智代子', id, 2 from units where slug = 'houkago-climax-girls';
-insert into members (name, unit_id, sort_order)
-select '西城樹里', id, 3 from units where slug = 'houkago-climax-girls';
-insert into members (name, unit_id, sort_order)
-select '杜野凛世', id, 4 from units where slug = 'houkago-climax-girls';
-insert into members (name, unit_id, sort_order)
-select '有栖川夏葉', id, 5 from units where slug = 'houkago-climax-girls';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '小宮果穂' and u.slug = 'houkago-climax-girls';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '園田智代子' and u.slug = 'houkago-climax-girls';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '西城樹里' and u.slug = 'houkago-climax-girls';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '杜野凛世' and u.slug = 'houkago-climax-girls';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '有栖川夏葉' and u.slug = 'houkago-climax-girls';
 
 -- ALSTROEMERIA
-insert into members (name, unit_id, sort_order)
-select '大崎甘奈', id, 1 from units where slug = 'alstroemeria';
-insert into members (name, unit_id, sort_order)
-select '大崎甜花', id, 2 from units where slug = 'alstroemeria';
-insert into members (name, unit_id, sort_order)
-select '桑山千雪', id, 3 from units where slug = 'alstroemeria';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '大崎甘奈' and u.slug = 'alstroemeria';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '大崎甜花' and u.slug = 'alstroemeria';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '桑山千雪' and u.slug = 'alstroemeria';
 
 -- Straylight
-insert into members (name, unit_id, sort_order)
-select '芹沢あさひ', id, 1 from units where slug = 'straylight';
-insert into members (name, unit_id, sort_order)
-select '黛冬優子', id, 2 from units where slug = 'straylight';
-insert into members (name, unit_id, sort_order)
-select '和泉愛依', id, 3 from units where slug = 'straylight';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '芹沢あさひ' and u.slug = 'straylight';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '黛冬優子' and u.slug = 'straylight';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '和泉愛依' and u.slug = 'straylight';
 
 -- noctchill
-insert into members (name, unit_id, sort_order)
-select '浅倉透', id, 1 from units where slug = 'noctchill';
-insert into members (name, unit_id, sort_order)
-select '樋口円香', id, 2 from units where slug = 'noctchill';
-insert into members (name, unit_id, sort_order)
-select '福丸小糸', id, 3 from units where slug = 'noctchill';
-insert into members (name, unit_id, sort_order)
-select '市川雛菜', id, 4 from units where slug = 'noctchill';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '浅倉透' and u.slug = 'noctchill';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '樋口円香' and u.slug = 'noctchill';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '福丸小糸' and u.slug = 'noctchill';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '市川雛菜' and u.slug = 'noctchill';
 
 -- SHHis
-insert into members (name, unit_id, sort_order)
-select '七草にちか', id, 1 from units where slug = 'shhis';
-insert into members (name, unit_id, sort_order)
-select '緋田美琴', id, 2 from units where slug = 'shhis';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '七草にちか' and u.slug = 'shhis';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '緋田美琴' and u.slug = 'shhis';
 
 -- CoMETIK
-insert into members (name, unit_id, sort_order)
-select '斑鳩ルカ', id, 1 from units where slug = 'cometik';
-insert into members (name, unit_id, sort_order)
-select '鈴木羽那', id, 2 from units where slug = 'cometik';
-insert into members (name, unit_id, sort_order)
-select '郁田はるき', id, 3 from units where slug = 'cometik';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '斑鳩ルカ' and u.slug = 'cometik';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '鈴木羽那' and u.slug = 'cometik';
+insert into member_units (member_id, unit_id, is_primary)
+select m.id, u.id, true from members m, units u
+where m.name = '郁田はるき' and u.slug = 'cometik';
 
 -- Vibeタグマスタデータ
 insert into vibe_tags (name, slug, sort_order) values
@@ -111,35 +170,35 @@ insert into songs (title, unit_id, song_type, youtube_url)
 select 'ヒカリのdestination', id, 'unit', 'https://youtu.be/wjQGpudph_8?si=BxW3-fCe0i460Zwv'
 from units where slug = 'illumination-stars';
 
-insert into songs (title, unit_id, song_type)
-select 'いつか Shiny Days', id, 'unit'
+insert into songs (title, unit_id, song_type, youtube_url)
+select 'いつか Shiny Days', id, 'unit', 'https://www.youtube.com/watch?v=lantica1'
 from units where slug = 'lantica';
 
 insert into songs (title, unit_id, song_type, youtube_url)
 select '夢咲きAfter school', id, 'unit', 'https://www.youtube.com/watch?v=example3'
 from units where slug = 'houkago-climax-girls';
 
-insert into songs (title, unit_id, song_type)
-select 'Hide & Attack', id, 'unit'
+insert into songs (title, unit_id, song_type, youtube_url)
+select 'Hide & Attack', id, 'unit', 'https://www.youtube.com/watch?v=straylight1'
 from units where slug = 'straylight';
 
-insert into songs (title, unit_id, song_type)
-select 'Colorful Days〜僕らの朝〜', id, 'unit'
+insert into songs (title, unit_id, song_type, youtube_url)
+select 'Colorful Days〜僕らの朝〜', id, 'unit', 'https://www.youtube.com/watch?v=noctchill1'
 from units where slug = 'noctchill';
 
 -- ソロ曲
-insert into songs (title, unit_id, member_id, song_type, attribute)
-select '星をめざして', u.id, m.id, 'solo', 'stella'
+insert into songs (title, unit_id, member_id, song_type, attribute, youtube_url)
+select '星をめざして', u.id, m.id, 'solo', 'stella', 'https://www.youtube.com/watch?v=mano1'
 from units u, members m
 where u.slug = 'illumination-stars' and m.name = '櫻木真乃';
 
-insert into songs (title, unit_id, member_id, song_type, attribute)
-select 'ありったけの輝きで', u.id, m.id, 'solo', 'luna'
+insert into songs (title, unit_id, member_id, song_type, attribute, youtube_url)
+select 'ありったけの輝きで', u.id, m.id, 'solo', 'luna', 'https://www.youtube.com/watch?v=hiori1'
 from units u, members m
 where u.slug = 'illumination-stars' and m.name = '風野灯織';
 
-insert into songs (title, unit_id, member_id, song_type, attribute)
-select 'ビーチブレイバー', u.id, m.id, 'solo', 'sol'
+insert into songs (title, unit_id, member_id, song_type, attribute, youtube_url)
+select 'ビーチブレイバー', u.id, m.id, 'solo', 'sol', 'https://www.youtube.com/watch?v=asahi1'
 from units u, members m
 where u.slug = 'straylight' and m.name = '芹沢あさひ';
 

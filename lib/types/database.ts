@@ -7,12 +7,19 @@ export interface Unit {
   slug: string;
 }
 
+export interface MemberUnit {
+  member_id: string;
+  unit_id: string;
+  is_primary: boolean;
+  unit?: Unit;
+}
+
 export interface Member {
   id: string;
   name: string;
-  unit_id: string;
   sort_order: number;
-  unit?: Unit;
+  member_units?: MemberUnit[];
+  units?: Unit[];
 }
 
 export interface VibeTag {
@@ -29,7 +36,7 @@ export interface Song {
   member_id: string | null;
   song_type: SongType;
   attribute: AttributeType | null;
-  youtube_url: string | null;
+  youtube_url: string;
   links: Record<string, string>;
   created_at: string;
   updated_at: string;
@@ -42,4 +49,18 @@ export interface SongWithRelations extends Song {
   unit: Unit;
   member: Member | null;
   vibe_tags: VibeTag[];
+}
+
+export type InquiryType = "request" | "question" | "other";
+export type InquiryStatus = "pending" | "in_progress" | "completed" | "issued";
+
+export interface Inquiry {
+  id: string;
+  inquiry_type: InquiryType;
+  name: string | null;
+  content: string;
+  status: InquiryStatus;
+  github_issue_url: string | null;
+  created_at: string;
+  updated_at: string;
 }

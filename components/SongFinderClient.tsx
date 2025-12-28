@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useFilterState } from "@/lib/hooks/useFilterState";
 import { getSongs, getSongCounts } from "@/lib/queries";
 import type {
@@ -46,35 +46,58 @@ export function SongFinderClient({
     attributes: { stella: 0, luna: 0, sol: 0 },
     vibeTags: {},
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
+  const isFirstMount = useRef(true);
 
-  const fetchData = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const [songsResult, countsResult] = await Promise.all([
-        getSongs({
-          unitSlug: unitSlug ?? undefined,
-          attribute: attribute ?? undefined,
-          vibeTagSlugs: vibeTagSlugs.length > 0 ? vibeTagSlugs : undefined,
-          searchQuery: searchQuery || undefined,
-        }),
-        getSongCounts({
-          unitSlug: unitSlug ?? undefined,
-          attribute: attribute ?? undefined,
-          vibeTagSlugs: vibeTagSlugs.length > 0 ? vibeTagSlugs : undefined,
-          searchQuery: searchQuery || undefined,
-        }),
-      ]);
-      setSongs(songsResult);
-      setCounts(countsResult);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [unitSlug, attribute, vibeTagSlugs, searchQuery]);
+  const vibeTagKey = vibeTagSlugs.join(",");
 
   useEffect(() => {
+    let cancelled = false;
+
+    const fetchData = async () => {
+      if (isFirstMount.current) {
+        setIsInitialLoading(true);
+      } else {
+        setIsFetching(true);
+      }
+
+      try {
+        const [songsResult, countsResult] = await Promise.all([
+          getSongs({
+            unitSlug: unitSlug ?? undefined,
+            attribute: attribute ?? undefined,
+            vibeTagSlugs: vibeTagSlugs.length > 0 ? vibeTagSlugs : undefined,
+            searchQuery: searchQuery || undefined,
+          }),
+          getSongCounts({
+            unitSlug: unitSlug ?? undefined,
+            attribute: attribute ?? undefined,
+            vibeTagSlugs: vibeTagSlugs.length > 0 ? vibeTagSlugs : undefined,
+            searchQuery: searchQuery || undefined,
+          }),
+        ]);
+
+        if (!cancelled) {
+          setSongs(songsResult);
+          setCounts(countsResult);
+        }
+      } finally {
+        if (!cancelled) {
+          setIsInitialLoading(false);
+          setIsFetching(false);
+          isFirstMount.current = false;
+        }
+      }
+    };
+
     fetchData();
-  }, [fetchData]);
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [unitSlug, attribute, vibeTagKey, searchQuery]);
 
   const hasActiveFilters =
     unitSlug !== null ||
@@ -115,12 +138,31 @@ export function SongFinderClient({
         </button>
       )}
 
-      {isLoading ? (
-        <div className="text-center py-12 text-slate-500">
-          読み込み中...
+      {isInitialLoading ? (
+        <div className="py-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="glass-card rounded-2xl overflow-hidden animate-pulse"
+              >
+                <div className="aspect-video bg-slate-200" />
+                <div className="p-4 space-y-3">
+                  <div className="h-5 bg-slate-200 rounded w-3/4" />
+                  <div className="h-4 bg-slate-100 rounded w-1/2" />
+                  <div className="flex gap-2">
+                    <div className="h-6 bg-slate-100 rounded-full w-16" />
+                    <div className="h-6 bg-slate-100 rounded-full w-12" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
-        <SongList songs={songs} />
+        <div className={`transition-opacity duration-200 ${isFetching ? "opacity-50" : "opacity-100"}`}>
+          <SongList songs={songs} />
+        </div>
       )}
     </div>
   );

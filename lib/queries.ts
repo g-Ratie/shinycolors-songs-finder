@@ -4,6 +4,8 @@ import type {
   VibeTag,
   SongWithRelations,
   AttributeType,
+  Inquiry,
+  InquiryStatus,
 } from "./types/database";
 
 export async function getUnits(): Promise<Unit[]> {
@@ -123,4 +125,41 @@ export async function getSongCounts(
   }
 
   return counts;
+}
+
+export async function getInquiries(): Promise<Inquiry[]> {
+  const { data, error } = await supabase
+    .from("inquiries")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function updateInquiryStatus(
+  id: string,
+  status: InquiryStatus
+): Promise<void> {
+  const { error } = await supabase
+    .from("inquiries")
+    .update({ status })
+    .eq("id", id);
+
+  if (error) throw error;
+}
+
+export async function updateInquiryIssueUrl(
+  id: string,
+  githubIssueUrl: string
+): Promise<void> {
+  const { error } = await supabase
+    .from("inquiries")
+    .update({
+      github_issue_url: githubIssueUrl,
+      status: "issued" as InquiryStatus,
+    })
+    .eq("id", id);
+
+  if (error) throw error;
 }

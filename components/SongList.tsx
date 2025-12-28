@@ -8,32 +8,51 @@ interface SongListProps {
   songs: SongWithRelations[];
 }
 
-const attributeColors = {
-  stella: "bg-pink-100 text-pink-700",
-  luna: "bg-blue-100 text-blue-700",
-  sol: "bg-amber-100 text-amber-700",
+const attributeStyles = {
+  stella: {
+    bg: "bg-gradient-to-r from-pink-100 to-pink-50",
+    text: "text-pink-600",
+    border: "border-pink-200",
+  },
+  luna: {
+    bg: "bg-gradient-to-r from-blue-100 to-blue-50",
+    text: "text-blue-600",
+    border: "border-blue-200",
+  },
+  sol: {
+    bg: "bg-gradient-to-r from-amber-100 to-amber-50",
+    text: "text-amber-600",
+    border: "border-amber-200",
+  },
 };
 
 export function SongList({ songs }: SongListProps) {
   if (songs.length === 0) {
     return (
-      <div className="text-center py-12 text-slate-500">
-        該当する楽曲がありません
+      <div className="text-center py-16">
+        <div className="inline-block p-8 glass-card rounded-2xl">
+          <p className="text-slate-500">該当する楽曲がありません</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-3">
-      <div className="text-sm text-slate-600">
-        {songs.length}件の楽曲
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-shiny-blue/30 to-transparent" />
+        <span className="text-sm font-medium text-slate-600 px-3">
+          {songs.length}件の楽曲
+        </span>
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-shiny-blue/30 to-transparent" />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {songs.map((song) => {
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {songs.map((song, index) => {
           const videoId = song.youtube_url
             ? extractVideoId(song.youtube_url)
             : null;
           const thumbnailUrl = videoId ? getThumbnailUrl(videoId, "mq") : null;
+          const attrStyle = song.attribute ? attributeStyles[song.attribute] : null;
 
           return (
             <a
@@ -41,65 +60,67 @@ export function SongList({ songs }: SongListProps) {
               href={song.youtube_url ?? undefined}
               target="_blank"
               rel="noopener noreferrer"
-              className={`block bg-white rounded-xl border border-shiny-blue/20 overflow-hidden shadow-sm transition-all ${
-                song.youtube_url
-                  ? "hover:shadow-md hover:border-shiny-blue cursor-pointer hover:-translate-y-0.5"
-                  : "cursor-default"
-              }`}
+              className="animate-fade-in block glass-card rounded-2xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group"
+              style={{ animationDelay: `${index * 50}ms` }}
             >
               {thumbnailUrl && (
-                <div className="relative aspect-video">
+                <div className="relative aspect-video overflow-hidden">
                   <Image
                     src={thumbnailUrl}
                     alt={song.title}
                     fill
-                    className="object-cover"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
-                  <div className="absolute inset-0 flex items-center justify-center bg-shiny-blue-dark/40 opacity-0 hover:opacity-100 transition-opacity">
-                    <svg
-                      className="w-12 h-12 text-white drop-shadow-lg"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-lg transform scale-75 group-hover:scale-100 transition-transform duration-300">
+                      <svg
+                        className="w-8 h-8 text-shiny-blue-dark ml-1"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
               )}
-              <div className="p-3">
-                <h3 className="font-medium text-slate-800 truncate">
+              <div className="p-4">
+                <h3 className="font-bold text-slate-800 truncate text-lg">
                   {song.title}
                 </h3>
-                <div className="mt-1 flex flex-wrap items-center gap-1.5 text-sm text-slate-500">
-                  <span>{song.unit.name}</span>
+                <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-slate-600">
+                  <span className="font-medium">{song.unit.name}</span>
                   {song.member && (
                     <>
-                      <span>/</span>
+                      <span className="text-slate-300">/</span>
                       <span>{song.member.name}</span>
                     </>
                   )}
-                  {song.attribute && (
+                </div>
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  {attrStyle && (
                     <span
-                      className={`px-1.5 py-0.5 rounded text-xs font-medium ${attributeColors[song.attribute]}`}
+                      className={`px-2 py-1 rounded-full text-xs font-bold ${attrStyle.bg} ${attrStyle.text} border ${attrStyle.border}`}
                     >
-                      {song.attribute.charAt(0).toUpperCase() +
-                        song.attribute.slice(1)}
+                      {song.attribute!.charAt(0).toUpperCase() + song.attribute!.slice(1)}
+                    </span>
+                  )}
+                  {song.vibe_tags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag.id}
+                      className="px-2 py-1 bg-shiny-blue/10 text-shiny-blue-dark rounded-full text-xs font-medium"
+                    >
+                      {tag.name}
+                    </span>
+                  ))}
+                  {song.vibe_tags.length > 3 && (
+                    <span className="text-xs text-slate-400">
+                      +{song.vibe_tags.length - 3}
                     </span>
                   )}
                 </div>
-                {song.vibe_tags.length > 0 && (
-                  <div className="mt-2 flex flex-wrap gap-1">
-                    {song.vibe_tags.map((tag) => (
-                      <span
-                        key={tag.id}
-                        className="px-1.5 py-0.5 bg-shiny-blue/10 text-shiny-blue-dark rounded text-xs"
-                      >
-                        {tag.name}
-                      </span>
-                    ))}
-                  </div>
-                )}
               </div>
             </a>
           );
