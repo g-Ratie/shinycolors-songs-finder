@@ -60,8 +60,8 @@ export function UnitSelector({
               `}
             >
               {Icon ? (
-                <div className={`transition-transform duration-200 ${isSelected ? "scale-110" : ""}`}>
-                  <Icon size={40} />
+                <div className={`flex items-center justify-center w-10 h-10 transition-transform duration-200 ${isSelected ? "scale-110" : ""}`}>
+                  <Icon size={32} />
                 </div>
               ) : (
                 <span className="w-10 h-10 flex items-center justify-center text-sm font-bold bg-shiny-blue/20 text-shiny-blue-dark rounded-xl">

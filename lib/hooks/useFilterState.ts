@@ -45,7 +45,7 @@ export function useFilterState() {
       }
 
       const query = params.toString();
-      router.push(query ? `${pathname}?${query}` : pathname);
+      router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
     },
     [state, router, pathname]
   );
@@ -86,7 +86,7 @@ export function useFilterState() {
   );
 
   const clearFilters = useCallback(() => {
-    router.push(pathname);
+    router.push(pathname, { scroll: false });
   }, [router, pathname]);
 
   return {

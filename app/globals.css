@@ -18,15 +18,17 @@
   --color-shiny-blue-dark: var(--shiny-blue-dark);
   --color-shiny-pink: var(--shiny-pink);
   --color-shiny-yellow: var(--shiny-yellow);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  overscroll-behavior: none;
 }
 
 body {
   background: linear-gradient(180deg, var(--shiny-blue-light) 0%, var(--background) 20%, #ffffff 100%);
   color: var(--foreground);
-  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
   min-height: 100vh;
+  overscroll-behavior: none;
 }
 
 @keyframes fadeIn {
