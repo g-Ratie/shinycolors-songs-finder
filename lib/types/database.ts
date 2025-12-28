@@ -43,3 +43,17 @@ export interface SongWithRelations extends Song {
   member: Member | null;
   vibe_tags: VibeTag[];
 }
+
+export type InquiryType = "request" | "question" | "other";
+export type InquiryStatus = "pending" | "in_progress" | "completed" | "issued";
+
+export interface Inquiry {
+  id: string;
+  inquiry_type: InquiryType;
+  name: string | null;
+  content: string;
+  status: InquiryStatus;
+  github_issue_url: string | null;
+  created_at: string;
+  updated_at: string;
+}
