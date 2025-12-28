@@ -8,10 +8,10 @@ export default async function Home() {
     <div className="min-h-screen">
       <div className="max-w-5xl mx-auto px-4 py-8">
         <header className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-shiny-blue-dark">
+          <h1 className="inline-block text-3xl font-bold text-white bg-shiny-blue px-6 py-2 rounded-full shadow-md">
             シャニマス楽曲検索
           </h1>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="mt-3 text-sm text-slate-700 drop-shadow-sm">
             ユニット、属性、Vibeタグで楽曲を検索できます
           </p>
         </header>
