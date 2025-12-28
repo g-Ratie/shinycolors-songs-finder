@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useFilterState } from "@/lib/hooks/useFilterState";
 import { getSongs, getSongCounts } from "@/lib/queries";
 import type {
@@ -46,35 +46,57 @@ export function SongFinderClient({
     attributes: { stella: 0, luna: 0, sol: 0 },
     vibeTags: {},
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
+  const isFirstMount = useRef(true);
 
-  const fetchData = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const [songsResult, countsResult] = await Promise.all([
-        getSongs({
-          unitSlug: unitSlug ?? undefined,
-          attribute: attribute ?? undefined,
-          vibeTagSlugs: vibeTagSlugs.length > 0 ? vibeTagSlugs : undefined,
-          searchQuery: searchQuery || undefined,
-        }),
-        getSongCounts({
-          unitSlug: unitSlug ?? undefined,
-          attribute: attribute ?? undefined,
-          vibeTagSlugs: vibeTagSlugs.length > 0 ? vibeTagSlugs : undefined,
-          searchQuery: searchQuery || undefined,
-        }),
-      ]);
-      setSongs(songsResult);
-      setCounts(countsResult);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [unitSlug, attribute, vibeTagSlugs, searchQuery]);
+  const vibeTagKey = vibeTagSlugs.join(",");
 
   useEffect(() => {
+    let cancelled = false;
+
+    const fetchData = async () => {
+      if (isFirstMount.current) {
+        setIsInitialLoading(true);
+      } else {
+        setIsFetching(true);
+      }
+
+      try {
+        const [songsResult, countsResult] = await Promise.all([
+          getSongs({
+            unitSlug: unitSlug ?? undefined,
+            attribute: attribute ?? undefined,
+            vibeTagSlugs: vibeTagSlugs.length > 0 ? vibeTagSlugs : undefined,
+            searchQuery: searchQuery || undefined,
+          }),
+          getSongCounts({
+            unitSlug: unitSlug ?? undefined,
+            attribute: attribute ?? undefined,
+            vibeTagSlugs: vibeTagSlugs.length > 0 ? vibeTagSlugs : undefined,
+            searchQuery: searchQuery || undefined,
+          }),
+        ]);
+
+        if (!cancelled) {
+          setSongs(songsResult);
+          setCounts(countsResult);
+        }
+      } finally {
+        if (!cancelled) {
+          setIsInitialLoading(false);
+          setIsFetching(false);
+          isFirstMount.current = false;
+        }
+      }
+    };
+
     fetchData();
-  }, [fetchData]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [unitSlug, attribute, vibeTagKey, searchQuery, vibeTagSlugs]);
 
   const hasActiveFilters =
     unitSlug !== null ||
@@ -115,7 +137,7 @@ export function SongFinderClient({
         </button>
       )}
 
-      {isLoading ? (
+      {isInitialLoading ? (
         <div className="py-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[...Array(6)].map((_, i) => (
@@ -137,7 +159,9 @@ export function SongFinderClient({
           </div>
         </div>
       ) : (
-        <SongList songs={songs} />
+        <div className={`transition-opacity duration-200 ${isFetching ? "opacity-50" : "opacity-100"}`}>
+          <SongList songs={songs} />
+        </div>
       )}
     </div>
   );

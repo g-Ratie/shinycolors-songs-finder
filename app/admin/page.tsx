@@ -42,7 +42,7 @@ export default function AdminPage() {
           >
             <h2 className="text-lg font-medium text-slate-800">タグ管理</h2>
             <p className="mt-1 text-sm text-slate-500">
-              Vibeタグの追加・削除
+              タグの追加・削除
             </p>
           </Link>
           <Link

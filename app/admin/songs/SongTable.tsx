@@ -291,7 +291,7 @@ export function SongTable({ songs, units, vibeTags, members }: SongTableProps) {
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                Vibeタグ
+                タグ
               </label>
               <div className="flex flex-wrap gap-2">
                 {vibeTags.map((tag) => (

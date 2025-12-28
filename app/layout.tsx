@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "シャニマス楽曲検索",
-  description: "シャイニーカラーズの楽曲をユニット、属性、Vibeタグで検索できます",
+  description: "シャイニーカラーズの楽曲をユニット、属性、タグで検索できます",
 };
 
 export default function RootLayout({

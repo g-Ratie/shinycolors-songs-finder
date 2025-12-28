@@ -18,7 +18,7 @@ export function VibeTagSelector({
   return (
     <div className="space-y-3">
       <h2 className="text-sm font-bold text-slate-700 tracking-wide">
-        Vibe
+        タグ
       </h2>
       <div className="flex flex-wrap gap-2">
         {vibeTags.map((tag) => {

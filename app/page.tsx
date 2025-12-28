@@ -16,7 +16,7 @@ export default async function Home() {
             </h1>
           </div>
           <p className="mt-4 text-slate-600">
-            ユニット、属性、Vibeタグで楽曲を検索できます
+            ユニット、属性、タグで楽曲を検索できます
           </p>
         </header>
 
