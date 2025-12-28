@@ -4,10 +4,12 @@ import {
   IlluminationStars,
   LAntica,
   HokagoClimaxGirls,
-  Alstromeria,
+  Alstroemeria,
   StrayLight,
+  Noctchill,
   Shhis,
   Cometik,
+  ShinyColors,
 } from "shinycolors-icons";
 import type { Unit } from "@/lib/types/database";
 
@@ -15,10 +17,12 @@ const unitIconMap: Record<string, React.FC<{ size?: number | string }>> = {
   "illumination-stars": IlluminationStars,
   lantica: LAntica,
   "houkago-climax-girls": HokagoClimaxGirls,
-  alstroemeria: Alstromeria,
+  alstroemeria: Alstroemeria,
   straylight: StrayLight,
+  noctchill: Noctchill,
   shhis: Shhis,
   cometik: Cometik,
+  "shiny-colors": ShinyColors,
 };
 
 interface UnitSelectorProps {
