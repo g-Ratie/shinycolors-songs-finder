@@ -8,7 +8,6 @@ export interface FilterState {
   unitSlug: string | null;
   attribute: AttributeType | null;
   vibeTagSlugs: string[];
-  searchQuery: string;
 }
 
 export function useFilterState() {
@@ -21,7 +20,6 @@ export function useFilterState() {
       unitSlug: searchParams.get("unit"),
       attribute: searchParams.get("attr") as AttributeType | null,
       vibeTagSlugs: searchParams.get("v")?.split(",").filter(Boolean) ?? [],
-      searchQuery: searchParams.get("q") ?? "",
     }),
     [searchParams]
   );
@@ -39,9 +37,6 @@ export function useFilterState() {
       }
       if (newState.vibeTagSlugs.length > 0) {
         params.set("v", newState.vibeTagSlugs.join(","));
-      }
-      if (newState.searchQuery) {
-        params.set("q", newState.searchQuery);
       }
 
       const query = params.toString();
@@ -78,13 +73,6 @@ export function useFilterState() {
     [state.vibeTagSlugs, updateFilters]
   );
 
-  const setSearchQuery = useCallback(
-    (query: string) => {
-      updateFilters({ searchQuery: query });
-    },
-    [updateFilters]
-  );
-
   const clearFilters = useCallback(() => {
     router.push(pathname, { scroll: false });
   }, [router, pathname]);
@@ -94,7 +82,6 @@ export function useFilterState() {
     toggleUnit,
     toggleAttribute,
     toggleVibeTag,
-    setSearchQuery,
     clearFilters,
   };
 }

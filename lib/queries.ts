@@ -31,7 +31,6 @@ export interface SongFilters {
   unitSlug?: string;
   attribute?: AttributeType;
   vibeTagSlugs?: string[];
-  searchQuery?: string;
 }
 
 export async function getSongs(
@@ -65,10 +64,6 @@ export async function getSongs(
     } else {
       return [];
     }
-  }
-
-  if (filters.searchQuery) {
-    query = query.ilike("title", `%${filters.searchQuery}%`);
   }
 
   const { data, error } = await query.order("created_at");

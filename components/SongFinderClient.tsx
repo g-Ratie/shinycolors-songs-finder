@@ -9,7 +9,6 @@ import type {
   SongWithRelations,
   AttributeType,
 } from "@/lib/types/database";
-import { SearchBar } from "./SearchBar";
 import { UnitSelector } from "./UnitSelector";
 import { AttributeSelector } from "./AttributeSelector";
 import { VibeTagSelector } from "./VibeTagSelector";
@@ -28,11 +27,9 @@ export function SongFinderClient({
     unitSlug,
     attribute,
     vibeTagSlugs,
-    searchQuery,
     toggleUnit,
     toggleAttribute,
     toggleVibeTag,
-    setSearchQuery,
     clearFilters,
   } = useFilterState();
 
@@ -68,13 +65,11 @@ export function SongFinderClient({
             unitSlug: unitSlug ?? undefined,
             attribute: attribute ?? undefined,
             vibeTagSlugs: vibeTagSlugs.length > 0 ? vibeTagSlugs : undefined,
-            searchQuery: searchQuery || undefined,
           }),
           getSongCounts({
             unitSlug: unitSlug ?? undefined,
             attribute: attribute ?? undefined,
             vibeTagSlugs: vibeTagSlugs.length > 0 ? vibeTagSlugs : undefined,
-            searchQuery: searchQuery || undefined,
           }),
         ]);
 
@@ -97,18 +92,15 @@ export function SongFinderClient({
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [unitSlug, attribute, vibeTagKey, searchQuery]);
+  }, [unitSlug, attribute, vibeTagKey]);
 
   const hasActiveFilters =
     unitSlug !== null ||
     attribute !== null ||
-    vibeTagSlugs.length > 0 ||
-    searchQuery !== "";
+    vibeTagSlugs.length > 0;
 
   return (
     <div className="space-y-6">
-      <SearchBar value={searchQuery} onChange={setSearchQuery} />
-
       <UnitSelector
         units={initialUnits}
         counts={counts.units}
