@@ -8,7 +8,8 @@ export async function GET() {
 
   const latency = Date.now() - start;
 
-  if (error && error.code !== "PGRST116") {
+  const tableNotFoundCodes = ["PGRST116", "PGRST205"];
+  if (error && !tableNotFoundCodes.includes(error.code)) {
     return NextResponse.json(
       {
         status: "error",
