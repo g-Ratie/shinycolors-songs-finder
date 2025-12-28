@@ -28,7 +28,7 @@ export function SongList({ songs }: SongListProps) {
       <div className="text-sm text-gray-500 dark:text-gray-400">
         {songs.length}件の楽曲
       </div>
-      <div className="grid gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {songs.map((song) => {
           const videoId = song.youtube_url
             ? extractVideoId(song.youtube_url)
@@ -47,61 +47,59 @@ export function SongList({ songs }: SongListProps) {
                   : "cursor-default"
               }`}
             >
-              <div className="flex">
-                {thumbnailUrl && (
-                  <div className="flex-shrink-0 relative w-40 h-24 sm:w-48 sm:h-28">
-                    <Image
-                      src={thumbnailUrl}
-                      alt={song.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 640px) 160px, 192px"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 hover:opacity-100 transition-opacity">
-                      <svg
-                        className="w-12 h-12 text-white"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
+              {thumbnailUrl && (
+                <div className="relative aspect-video">
+                  <Image
+                    src={thumbnailUrl}
+                    alt={song.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 hover:opacity-100 transition-opacity">
+                    <svg
+                      className="w-12 h-12 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
                   </div>
-                )}
-                <div className="flex-1 min-w-0 p-4">
-                  <h3 className="font-medium text-gray-900 dark:text-white truncate">
-                    {song.title}
-                  </h3>
-                  <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                    <span>{song.unit.name}</span>
-                    {song.member && (
-                      <>
-                        <span>/</span>
-                        <span>{song.member.name}</span>
-                      </>
-                    )}
-                    {song.attribute && (
-                      <span
-                        className={`px-2 py-0.5 rounded text-xs font-medium ${attributeColors[song.attribute]}`}
-                      >
-                        {song.attribute.charAt(0).toUpperCase() +
-                          song.attribute.slice(1)}
-                      </span>
-                    )}
-                  </div>
-                  {song.vibe_tags.length > 0 && (
-                    <div className="mt-2 flex flex-wrap gap-1">
-                      {song.vibe_tags.map((tag) => (
-                        <span
-                          key={tag.id}
-                          className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded text-xs"
-                        >
-                          {tag.name}
-                        </span>
-                      ))}
-                    </div>
+                </div>
+              )}
+              <div className="p-3">
+                <h3 className="font-medium text-gray-900 dark:text-white truncate">
+                  {song.title}
+                </h3>
+                <div className="mt-1 flex flex-wrap items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+                  <span>{song.unit.name}</span>
+                  {song.member && (
+                    <>
+                      <span>/</span>
+                      <span>{song.member.name}</span>
+                    </>
+                  )}
+                  {song.attribute && (
+                    <span
+                      className={`px-1.5 py-0.5 rounded text-xs font-medium ${attributeColors[song.attribute]}`}
+                    >
+                      {song.attribute.charAt(0).toUpperCase() +
+                        song.attribute.slice(1)}
+                    </span>
                   )}
                 </div>
+                {song.vibe_tags.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-1">
+                    {song.vibe_tags.map((tag) => (
+                      <span
+                        key={tag.id}
+                        className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded text-xs"
+                      >
+                        {tag.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </a>
           );
