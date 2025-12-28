@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# シャイニーカラーズ楽曲検索
 
-## Getting Started
+アイドルマスター シャイニーカラーズの楽曲を検索できるWebアプリケーション。
 
-First, run the development server:
+## 機能
+
+- ユニット、属性、タグによる楽曲フィルタリング
+- キーワード検索
+- 管理者向けデータ管理機能（認証付き）
+
+## 技術スタック
+
+- Next.js 16（App Router）
+- React 19
+- TypeScript 5
+- Tailwind CSS 4
+- Supabase（PostgreSQL + Auth）
+
+## ローカル開発
+
+### 前提条件
+
+- Node.js 20以上
+- Docker（Supabaseローカル環境用）
+
+### セットアップ
 
 ```bash
+# 依存パッケージのインストール
+npm install
+
+# Supabaseローカル環境の起動
+supabase start
+
+# 環境変数の設定（.env.localを作成）
+cp .env.example .env.local
+
+# 開発サーバーの起動
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 環境変数
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<supabase startで表示されるanon key>
+SUPABASE_SERVICE_ROLE_KEY=<supabase startで表示されるservice_role key>
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## コマンド
 
-## Learn More
+```bash
+npm run dev      # 開発サーバー起動
+npm run build    # プロダクションビルド
+npm run lint     # ESLint実行
+npm run start    # プロダクションサーバー起動
+```
 
-To learn more about Next.js, take a look at the following resources:
+## ディレクトリ構成
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+app/                    # Next.js App Router
+  admin/                # 管理画面
+  api/                  # API Routes
+  auth/                 # 認証コールバック
+components/             # UIコンポーネント
+lib/                    # ユーティリティ
+  auth/                 # 認証ヘルパー
+  supabase/             # Supabaseクライアント
+  types/                # 型定義
+supabase/
+  migrations/           # DBマイグレーション
+  seed.sql              # 初期データ
+```
