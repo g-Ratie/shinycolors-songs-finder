@@ -1,6 +1,6 @@
 "use server";
 
-import { supabase } from "@/lib/supabase";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 
 interface ActionResult {
@@ -9,6 +9,7 @@ interface ActionResult {
 }
 
 export async function createVibeTag(name: string): Promise<ActionResult> {
+  const supabase = createAdminClient();
   const slug = name
     .toLowerCase()
     .replace(/\s+/g, "-")
@@ -44,7 +45,7 @@ export async function createVibeTag(name: string): Promise<ActionResult> {
 }
 
 export async function deleteVibeTag(id: string): Promise<ActionResult> {
-  // 先に紐付けを削除
+  const supabase = createAdminClient();
   await supabase.from("song_vibe_tags").delete().eq("vibe_tag_id", id);
 
   const { error } = await supabase.from("vibe_tags").delete().eq("id", id);

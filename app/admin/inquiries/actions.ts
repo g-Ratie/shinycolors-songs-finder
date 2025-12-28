@@ -1,6 +1,6 @@
 "use server";
 
-import { supabase } from "@/lib/supabase";
+import { createAdminClient } from "@/lib/supabase/admin";
 import type { Inquiry, InquiryType } from "@/lib/types/database";
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
@@ -26,6 +26,7 @@ export async function createGitHubIssues(
     return { success: false, error: "GitHub環境変数が設定されていません" };
   }
 
+  const supabase = createAdminClient();
   const { data: inquiries, error: fetchError } = await supabase
     .from("inquiries")
     .select("*")

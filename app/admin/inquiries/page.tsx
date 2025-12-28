@@ -1,8 +1,20 @@
 import Link from "next/link";
-import { getInquiries } from "@/lib/queries";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { InquiryList } from "./InquiryList";
+import type { Inquiry } from "@/lib/types/database";
 
 export const dynamic = "force-dynamic";
+
+async function getInquiries(): Promise<Inquiry[]> {
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from("inquiries")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data ?? [];
+}
 
 export default async function AdminInquiriesPage() {
   const inquiries = await getInquiries();

@@ -1,6 +1,6 @@
 "use server";
 
-import { supabase } from "@/lib/supabase";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 
 interface UnitAssignment {
@@ -13,6 +13,7 @@ export async function createMember(
   sortOrder: number,
   unitAssignments: UnitAssignment[]
 ) {
+  const supabase = createAdminClient();
   const { data: member, error: memberError } = await supabase
     .from("members")
     .insert({ name, sort_order: sortOrder })
@@ -52,6 +53,7 @@ export async function updateMember(
   sortOrder: number,
   unitAssignments: UnitAssignment[]
 ) {
+  const supabase = createAdminClient();
   const { data: existingUnits } = await supabase
     .from("member_units")
     .select("*")
@@ -101,6 +103,7 @@ export async function updateMember(
 }
 
 export async function deleteMember(id: string) {
+  const supabase = createAdminClient();
   const { error } = await supabase.from("members").delete().eq("id", id);
 
   if (error) {
