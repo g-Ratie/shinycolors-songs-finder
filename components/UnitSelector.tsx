@@ -22,7 +22,7 @@ const unitIconMap: Record<string, React.FC<{ size?: number | string }>> = {
   noctchill: Noctchill,
   shhis: Shhis,
   cometik: Cometik,
-  "shinycolors": ShinyColors,
+  shinycolors: ShinyColors,
 };
 
 interface UnitSelectorProps {
