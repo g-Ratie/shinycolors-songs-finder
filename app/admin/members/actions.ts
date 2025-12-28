@@ -1,6 +1,7 @@
 "use server";
 
 import { supabase } from "@/lib/supabase";
+import { revalidatePath } from "next/cache";
 
 interface UnitAssignment {
   unitId: string;
@@ -34,9 +35,13 @@ export async function createMember(
       .insert(memberUnits);
 
     if (unitError) {
+      await supabase.from("members").delete().eq("id", member.id);
       return { success: false, error: unitError.message };
     }
   }
+
+  revalidatePath("/");
+  revalidatePath("/admin/members");
 
   return { success: true };
 }
@@ -47,6 +52,11 @@ export async function updateMember(
   sortOrder: number,
   unitAssignments: UnitAssignment[]
 ) {
+  const { data: existingUnits } = await supabase
+    .from("member_units")
+    .select("*")
+    .eq("member_id", id);
+
   const { error: memberError } = await supabase
     .from("members")
     .update({ name, sort_order: sortOrder })
@@ -77,9 +87,15 @@ export async function updateMember(
       .insert(memberUnits);
 
     if (unitError) {
+      if (existingUnits && existingUnits.length > 0) {
+        await supabase.from("member_units").insert(existingUnits);
+      }
       return { success: false, error: unitError.message };
     }
   }
+
+  revalidatePath("/");
+  revalidatePath("/admin/members");
 
   return { success: true };
 }
@@ -90,6 +106,9 @@ export async function deleteMember(id: string) {
   if (error) {
     return { success: false, error: error.message };
   }
+
+  revalidatePath("/");
+  revalidatePath("/admin/members");
 
   return { success: true };
 }

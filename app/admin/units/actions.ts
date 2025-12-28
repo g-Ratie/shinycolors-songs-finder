@@ -1,6 +1,7 @@
 "use server";
 
 import { supabase } from "@/lib/supabase";
+import { revalidatePath } from "next/cache";
 
 function generateSlug(name: string): string {
   return name
@@ -19,6 +20,9 @@ export async function createUnit(name: string) {
     return { success: false, error: error.message };
   }
 
+  revalidatePath("/");
+  revalidatePath("/admin/units");
+
   return { success: true };
 }
 
@@ -34,6 +38,9 @@ export async function updateUnit(id: string, name: string) {
     return { success: false, error: error.message };
   }
 
+  revalidatePath("/");
+  revalidatePath("/admin/units");
+
   return { success: true };
 }
 
@@ -43,6 +50,9 @@ export async function deleteUnit(id: string) {
   if (error) {
     return { success: false, error: error.message };
   }
+
+  revalidatePath("/");
+  revalidatePath("/admin/units");
 
   return { success: true };
 }

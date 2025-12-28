@@ -96,7 +96,8 @@ export function SongFinderClient({
     return () => {
       cancelled = true;
     };
-  }, [unitSlug, attribute, vibeTagKey, searchQuery, vibeTagSlugs]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [unitSlug, attribute, vibeTagKey, searchQuery]);
 
   const hasActiveFilters =
     unitSlug !== null ||
