@@ -18,6 +18,8 @@ allowed-tools: Bash, Read, Glob, Grep
 
 4. `gh pr create` でPRを作成する
    - タイトル: コミット内容を要約（日本語）
+      - 先頭にprefixをつけないようにする
+      - feat/, fix/などのprefixは不要
    - ボディ: 以下の形式で記述
      ```
      ## Summary
